@@ -1,4 +1,4 @@
-package studio.stilip.geek
+package studio.stilip.geek.app
 
 import android.os.Bundle
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -7,6 +7,7 @@ import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
+import studio.stilip.geek.R
 import studio.stilip.geek.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {

@@ -1,4 +1,4 @@
-package studio.stilip.geek.ui.notifications
+package studio.stilip.geek.app.notifications
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -29,9 +29,9 @@ class NotificationsFragment : Fragment() {
         val root: View = binding.root
 
         val textView: TextView = binding.textNotifications
-        notificationsViewModel.text.observe(viewLifecycleOwner) {
-            textView.text = it
-        }
+//        notificationsViewModel.text.observe(viewLifecycleOwner) {
+//            textView.text = it
+//        }
         return root
     }
 
