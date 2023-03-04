@@ -9,7 +9,13 @@
         android:id="@+id/navigation_games"
         android:name="studio.stilip.geek.app.games.GamesFragment"
         android:label="@string/title_games"
-        tools:layout="@layout/fragment_games" />
+        tools:layout="@layout/fragment_games">
+        <action
+            android:id="@+id/action_navigation_games_to_signIn"
+            app:destination="@id/navigation_sign_in"
+            app:popUpTo="@id/navigation_games"
+            app:popUpToInclusive="true" />
+    </fragment>
 
     <fragment
         android:id="@+id/navigation_home"
@@ -22,4 +28,39 @@
         android:name="studio.stilip.geek.app.notifications.NotificationsFragment"
         android:label="@string/title_notifications"
         tools:layout="@layout/fragment_notifications" />
+
+    <fragment
+        android:id="@+id/navigation_sign_up"
+        android:name="studio.stilip.geek.app.authorization.SignUpFragment"
+        android:label="SignUpFragment"
+        tools:layout="@layout/fragment_sign_up">
+        <action
+            android:id="@+id/action_navigation_sign_up_to_sign_in"
+            app:destination="@id/navigation_sign_in"
+            app:popUpTo="@id/navigation_sign_up"
+            app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/action_navigation_sign_up_to_games"
+            app:destination="@id/navigation_games"
+            app:popUpTo="@id/navigation_sign_up"
+            app:popUpToInclusive="true" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_sign_in"
+        android:name="studio.stilip.geek.app.authorization.SignInFragment"
+        android:label="SignInFragment"
+        tools:layout="@layout/fragment_sign_in">
+        <action
+            android:id="@+id/action_navigation_sign_in_to_sign_up"
+            app:destination="@id/navigation_sign_up"
+            app:popUpTo="@id/navigation_sign_in"
+            app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/action_navigation_sign_in_to_games"
+            app:destination="@id/navigation_games"
+            app:popUpTo="@id/navigation_sign_in"
+            app:popUpToInclusive="true" />
+    </fragment>
+
 </navigation>
