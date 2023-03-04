@@ -4,6 +4,9 @@ import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
 import dagger.hilt.android.AndroidEntryPoint
 import studio.stilip.geek.R
 import studio.stilip.geek.databinding.FragmentGamesBinding
@@ -12,6 +15,16 @@ import studio.stilip.geek.databinding.FragmentGamesBinding
 class GamesFragment : Fragment(R.layout.fragment_games) {
 
     private val viewModel: GamesViewModel by viewModels()
+
+    override fun onStart() {
+        super.onStart()
+        val auth = Firebase.auth
+        val currentUser = auth.currentUser
+
+        if (currentUser == null) {
+            findNavController().navigate(R.id.action_navigation_games_to_signIn)
+        }
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

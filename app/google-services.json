@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "303677867271",
+    "firebase_url": "https://geekdb1-default-rtdb.europe-west1.firebasedatabase.app",
+    "project_id": "geekdb1",
+    "storage_bucket": "geekdb1.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:303677867271:android:c9dfd6db245b8257f0f1a2",
+        "android_client_info": {
+          "package_name": "studio.stilip.geek"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "303677867271-3qeirctltslpus3tqudhvmv8b38g5pqr.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAWcthr7gfa6CdPIstVHZIRykVZEDCzps8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "303677867271-3qeirctltslpus3tqudhvmv8b38g5pqr.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
