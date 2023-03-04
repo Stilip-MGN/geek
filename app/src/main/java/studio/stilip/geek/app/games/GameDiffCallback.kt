@@ -1,7 +1,7 @@
 package studio.stilip.geek.app.games
 
 import androidx.recyclerview.widget.DiffUtil
-import studio.stilip.geek.domain.Game
+import studio.stilip.geek.domain.entities.Game
 
 object GameDiffCallback : DiffUtil.ItemCallback<Game>() {
 

@@ -1,11 +1,15 @@
 package studio.stilip.geek.app.games
 
 import androidx.lifecycle.ViewModel
+import dagger.hilt.android.lifecycle.HiltViewModel
+import studio.stilip.geek.domain.usecase.game.GetAllGamesUserUseCase
+import javax.inject.Inject
 
-class GamesViewModel : ViewModel() {
+@HiltViewModel
+class GamesViewModel @Inject constructor(
+    private val getAllGames: GetAllGamesUserUseCase,
+) : ViewModel() {
 
-//    private val _text = MutableLiveData<String>().apply {
-//        value = "This is dashboard Fragment"
-//    }
-//    val text: LiveData<String> = _text
+    val games = getAllGames()
+
 }

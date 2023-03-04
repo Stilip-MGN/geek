@@ -1,4 +1,4 @@
-package studio.stilip.geek.domain
+package studio.stilip.geek.domain.entities
 
 data class Game(
     val id: String = "",

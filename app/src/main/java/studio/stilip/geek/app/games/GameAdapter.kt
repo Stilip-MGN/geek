@@ -4,7 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
 import studio.stilip.geek.databinding.CardGameBinding
-import studio.stilip.geek.domain.Game
+import studio.stilip.geek.domain.entities.Game
 
 class GameAdapter(
     private val onItemClicked: () -> Unit,

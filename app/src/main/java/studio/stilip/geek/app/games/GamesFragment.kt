@@ -7,7 +7,6 @@ import androidx.fragment.app.viewModels
 import dagger.hilt.android.AndroidEntryPoint
 import studio.stilip.geek.R
 import studio.stilip.geek.databinding.FragmentGamesBinding
-import studio.stilip.geek.domain.Game
 
 @AndroidEntryPoint
 class GamesFragment : Fragment(R.layout.fragment_games) {
@@ -20,7 +19,7 @@ class GamesFragment : Fragment(R.layout.fragment_games) {
         val binding = FragmentGamesBinding.bind(view)
 
         val adapter = GameAdapter { }
-        adapter.submitList(arr)
+        adapter.submitList(viewModel.games)
 
         with(binding) {
             recGames.adapter = adapter
@@ -28,12 +27,4 @@ class GamesFragment : Fragment(R.layout.fragment_games) {
 
     }
 
-    val arr = arrayListOf(
-        Game(name = "A", time = "30 min", countPlayers = "2-3", age = "10+"),
-        Game(
-            name = "B", time = "120 min", countPlayers = "1-3", age = "15+",
-            description = "Вышел в поле дед",
-            logo = "https://tesera.ru/images/items/1401961,3/200x200xpa/photo1.png"
-        ),
-    )
 }

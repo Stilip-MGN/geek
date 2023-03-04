@@ -1,11 +1,9 @@
 package studio.stilip.geek.app.games
 
-import android.net.Uri
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import studio.stilip.geek.databinding.CardGameBinding
-import studio.stilip.geek.domain.Game
-
+import studio.stilip.geek.domain.entities.Game
 
 class GameViewHolder(
     private val binding: CardGameBinding,
