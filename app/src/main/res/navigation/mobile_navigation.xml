@@ -32,7 +32,7 @@
     <fragment
         android:id="@+id/navigation_sign_up"
         android:name="studio.stilip.geek.app.authorization.SignUpFragment"
-        android:label="SignUpFragment"
+        android:label="@string/authorization"
         tools:layout="@layout/fragment_sign_up">
         <action
             android:id="@+id/action_navigation_sign_up_to_sign_in"
@@ -42,14 +42,14 @@
         <action
             android:id="@+id/action_navigation_sign_up_to_games"
             app:destination="@id/navigation_games"
-            app:popUpTo="@id/navigation_sign_up"
+            app:popUpTo="@id/navigation_sign_in"
             app:popUpToInclusive="true" />
     </fragment>
 
     <fragment
         android:id="@+id/navigation_sign_in"
         android:name="studio.stilip.geek.app.authorization.SignInFragment"
-        android:label="SignInFragment"
+        android:label="@string/authorization"
         tools:layout="@layout/fragment_sign_in">
         <action
             android:id="@+id/action_navigation_sign_in_to_sign_up"

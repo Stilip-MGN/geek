@@ -8,4 +8,12 @@
     <string name="enter">Войти</string>
     <string name="registration">Регистрация</string>
     <string name="register">Зарегистрироваться</string>
+    <string name="error_sign_in">Такой пользователь не найден</string>
+    <string name="error_input_empty">Поле должно быть заполнено</string>
+    <string name="empty_text"> </string>
+    <string name="invalid_email">Неверный формат почты</string>
+    <string name="invalid_password">Минимальная длина пароля 6 символов</string>
+    <string name="error_email_already_exists">Эта почта уже используется</string>
+    <string name="try_again">Попробуйте ещё раз</string>
+    <string name="authorization">Авторизация</string>
 </resources>
