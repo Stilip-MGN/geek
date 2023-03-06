@@ -42,7 +42,7 @@
         <action
             android:id="@+id/action_navigation_sign_up_to_games"
             app:destination="@id/navigation_games"
-            app:popUpTo="@id/navigation_sign_in"
+            app:popUpTo="@id/navigation_sign_up"
             app:popUpToInclusive="true" />
     </fragment>
 
