@@ -1,6 +1,7 @@
 package studio.stilip.geek.app
 
 import android.os.Bundle
+import android.view.MenuItem
 import android.view.View
 import androidx.activity.viewModels
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -58,5 +59,15 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            android.R.id.home -> {
+                super.onBackPressed()
+                return true
+            }
+        }
+        return super.onOptionsItemSelected(item)
     }
 }

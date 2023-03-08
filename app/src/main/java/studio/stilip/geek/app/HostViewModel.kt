@@ -11,7 +11,7 @@ import javax.inject.Singleton
 @Singleton
 class HostViewModel : ViewModel() {
 
-    private val _bottomBarVisible = MutableSharedFlow<Boolean>(0, 1)
+    private val _bottomBarVisible = MutableSharedFlow<Boolean>(1, 1)
     private val _toolbarTitle = MutableSharedFlow<String>(0, 1)
     private val _toolbarBackBtn = MutableSharedFlow<Boolean>(0, 1)
 

@@ -16,4 +16,8 @@
     <string name="error_email_already_exists">Эта почта уже используется</string>
     <string name="try_again">Попробуйте ещё раз</string>
     <string name="authorization">Авторизация</string>
+    <string name="information_about_game">Информация об игре</string>
+    <string name="dimensions_length_width_height">Размеры(ДxШxВ):</string>
+    <string name="weight_title">Вес:</string>
+    <string name="about_box_title">О коробке</string>
 </resources>
