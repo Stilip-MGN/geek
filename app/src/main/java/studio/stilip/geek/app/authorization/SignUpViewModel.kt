@@ -19,11 +19,14 @@ class SignUpViewModel @Inject constructor(
     val userSignedUp = MutableStateFlow<Boolean?>(null)
     val editEmailHelper = MutableStateFlow(R.string.empty_text)
     val editPasswordHelper = MutableStateFlow(R.string.empty_text)
+    val editNicknameHelper = MutableStateFlow(R.string.empty_text)
 
-    suspend fun signUp(email: String, password: String) {
+    suspend fun signUp(email: String, password: String, nickname: String) {
         val isValEmail = validateEmail(email)
         val isValPassword = validatePassword(password)
-        if (isValEmail && isValPassword) {
+        val isValNickname = validateNickname(nickname)
+
+        if (isValEmail && isValPassword && isValNickname) {
             try {
                 signUpUser(email, password)
                 userSignedUp.value = true
@@ -58,6 +61,16 @@ class SignUpViewModel @Inject constructor(
             false
         } else {
             editPasswordHelper.value = R.string.empty_text
+            true
+        }
+    }
+
+    private fun validateNickname(nickname: String): Boolean {
+        return if (nickname.isEmpty()) {
+            editNicknameHelper.value = R.string.error_input_empty
+            false
+        } else {
+            editNicknameHelper.value = R.string.empty_text
             true
         }
     }
