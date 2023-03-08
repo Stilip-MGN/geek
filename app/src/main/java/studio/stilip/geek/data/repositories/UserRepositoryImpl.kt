@@ -4,6 +4,9 @@ import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.database.DatabaseReference
+import kotlinx.coroutines.channels.awaitClose
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.tasks.await
 import studio.stilip.geek.domain.entities.User
 import studio.stilip.geek.domain.repository_interface.UserRepository
@@ -25,6 +28,13 @@ class UserRepositoryImpl @Inject constructor(
 
     override suspend fun getCurrentUser(): FirebaseUser? {
         return FirebaseAuth.getInstance().currentUser
+    }
+
+    override fun getCurrentUserRef(): Flow<FirebaseUser?> {
+        return callbackFlow {
+            send(FirebaseAuth.getInstance().currentUser)
+            awaitClose()
+        }
     }
 
     override suspend fun updateUserInfo(user: User): Void {
