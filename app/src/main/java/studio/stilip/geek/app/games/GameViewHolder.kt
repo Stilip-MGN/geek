@@ -7,14 +7,14 @@ import studio.stilip.geek.domain.entities.Game
 
 class GameViewHolder(
     private val binding: CardGameBinding,
-    private val onItemClicked: () -> Unit,
+    private val onItemClicked: (String) -> Unit,
 ) : RecyclerView.ViewHolder(binding.root) {
 
     private lateinit var game: Game
 
     init {
         itemView.setOnClickListener {
-            onItemClicked()
+            onItemClicked(game.id)
         }
     }
 

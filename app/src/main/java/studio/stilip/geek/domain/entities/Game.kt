@@ -8,4 +8,6 @@ data class Game(
     val countPlayers: String = "",
     val age: String = "",
     val description: String = "",
+    val dimensions: String = "",
+    val weight: String = "",
 )

@@ -45,4 +45,21 @@ class GameRepositoryImpl @Inject constructor(
         awaitClose { games.removeEventListener(listener) }
     }
 
+    override fun getGameById(id: String): Flow<Game> = callbackFlow {
+        val games = database.child("Games").child(id)
+        val listener = games.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                launch {
+                    snapshot.getValue(Game::class.java)?.let { send(it) }
+                }
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                cancel("Unable take games", error.toException())
+            }
+
+        })
+        awaitClose { games.removeEventListener(listener) }
+    }
+
 }

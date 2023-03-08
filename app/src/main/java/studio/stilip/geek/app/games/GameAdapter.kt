@@ -7,7 +7,7 @@ import studio.stilip.geek.databinding.CardGameBinding
 import studio.stilip.geek.domain.entities.Game
 
 class GameAdapter(
-    private val onItemClicked: () -> Unit,
+    private val onItemClicked: (String) -> Unit,
 ) : ListAdapter<Game, GameViewHolder>(GameDiffCallback) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =

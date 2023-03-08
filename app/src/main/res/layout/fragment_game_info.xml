@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".app.games.gameinfo.GameInfoFragment">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/img_sw"
+            android:layout_width="match_parent"
+            android:layout_height="275dp"
+            android:background="@color/white"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:srcCompat="@tools:sample/backgrounds/scenic" />
+
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/btn_image_left"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            android:padding="10dp"
+            app:layout_constraintBottom_toBottomOf="@id/img_sw"
+            app:layout_constraintStart_toStartOf="@id/img_sw"
+            app:layout_constraintTop_toTopOf="@id/img_sw"
+            app:shapeAppearanceOverlay="@style/roundedImageViewRounded"
+            app:srcCompat="@drawable/ic_arrow_back_24" />
+
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/btn_image_right"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            android:padding="10dp"
+            app:layout_constraintBottom_toBottomOf="@id/img_sw"
+            app:layout_constraintEnd_toEndOf="@id/img_sw"
+            app:layout_constraintTop_toTopOf="@id/img_sw"
+            app:shapeAppearanceOverlay="@style/roundedImageViewRounded"
+            app:srcCompat="@drawable/ic_arrow_forward_24" />
+
+        <TextView
+            android:id="@+id/name"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="20dp"
+            android:layout_marginTop="10dp"
+            android:textAppearance="?textAppearanceHeadline5"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/img_sw"
+            tools:text="Семь чудес: Дуэль" />
+
+        <TextView
+            android:id="@+id/time"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:drawablePadding="2dp"
+            android:textAppearance="?textAppearanceBody1"
+            app:drawableStartCompat="@drawable/ic_time_24"
+            app:layout_constraintEnd_toStartOf="@id/players"
+            app:layout_constraintHorizontal_weight="3"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/name"
+            tools:text="30-75 мин" />
+
+        <TextView
+            android:id="@+id/players"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:drawablePadding="2dp"
+            android:textAppearance="?textAppearanceBody1"
+            app:drawableStartCompat="@drawable/ic_group_24"
+            app:layout_constraintEnd_toStartOf="@id/age"
+            app:layout_constraintHorizontal_weight="2"
+            app:layout_constraintStart_toEndOf="@id/time"
+            app:layout_constraintTop_toBottomOf="@id/name"
+            tools:text="2-4" />
+
+        <TextView
+            android:id="@+id/age"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="20dp"
+            android:drawablePadding="2dp"
+            android:textAppearance="?textAppearanceBody1"
+            app:drawableStartCompat="@drawable/ic_child_24"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_weight="2"
+            app:layout_constraintStart_toEndOf="@id/players"
+            app:layout_constraintTop_toBottomOf="@id/name"
+            tools:text="14+" />
+
+        <TextView
+            android:id="@+id/description_title"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="10dp"
+            android:text="Описание"
+            android:textAppearance="?textAppearanceHeadline6"
+            app:layout_constraintEnd_toStartOf="@id/players"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/time" />
+
+        <TextView
+            android:id="@+id/description"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="20dp"
+            android:textAppearance="?textAppearanceBody1"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/description_title"
+            tools:text="@tools:sample/lorem[50]" />
+
+        <TextView
+            android:id="@+id/box_title"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="10dp"
+            android:text="@string/about_box_title"
+            android:textAppearance="?textAppearanceHeadline6"
+            app:layout_constraintEnd_toStartOf="@id/players"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/description" />
+
+        <TextView
+            android:id="@+id/dimensions_title"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:drawablePadding="2dp"
+            android:text="@string/dimensions_length_width_height"
+            android:textAppearance="?textAppearanceBody1"
+            app:layout_constraintStart_toStartOf="@id/box_title"
+            app:layout_constraintTop_toBottomOf="@id/box_title" />
+
+        <TextView
+            android:id="@+id/dimensions"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="5dp"
+            android:drawablePadding="2dp"
+            android:textAppearance="?textAppearanceBody1"
+            app:layout_constraintBaseline_toBaselineOf="@id/dimensions_title"
+            app:layout_constraintStart_toEndOf="@id/dimensions_title"
+            tools:text="100x100x20 мм" />
+
+        <TextView
+            android:id="@+id/weight_title"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:drawablePadding="2dp"
+            android:text="@string/weight_title"
+            android:textAppearance="?textAppearanceBody1"
+            app:layout_constraintStart_toStartOf="@id/box_title"
+            app:layout_constraintTop_toBottomOf="@id/dimensions_title" />
+
+        <TextView
+            android:id="@+id/weight"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:drawablePadding="2dp"
+            android:textAppearance="?textAppearanceBody1"
+            app:layout_constraintBaseline_toBaselineOf="@id/weight_title"
+            app:layout_constraintStart_toStartOf="@+id/dimensions"
+            tools:text="1500 г" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>

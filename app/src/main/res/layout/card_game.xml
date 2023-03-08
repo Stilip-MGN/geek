@@ -39,9 +39,11 @@
             android:id="@+id/time"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
+            android:gravity="center"
+            app:drawableStartCompat="@drawable/ic_time_24"
             app:layout_constraintEnd_toStartOf="@id/players"
-            app:layout_constraintStart_toEndOf="@id/logo"
+            app:layout_constraintHorizontal_weight="3"
+            app:layout_constraintStart_toStartOf="@id/name"
             app:layout_constraintTop_toBottomOf="@id/name"
             tools:text="30-75 мин" />
 
@@ -49,20 +51,26 @@
             android:id="@+id/players"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            app:layout_constraintEnd_toStartOf="@+id/age"
+            android:gravity="center"
+            app:drawableStartCompat="@drawable/ic_group_24"
+            app:layout_constraintEnd_toStartOf="@id/age"
+            app:layout_constraintHorizontal_weight="2"
             app:layout_constraintStart_toEndOf="@id/time"
             app:layout_constraintTop_toBottomOf="@id/name"
-            tools:text="2-4 игрока" />
+            tools:text="2-4" />
 
         <TextView
             android:id="@+id/age"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="10dp"
-            app:layout_constraintEnd_toEndOf="parent"
+            android:gravity="center"
+            app:drawableStartCompat="@drawable/ic_child_24"
+            app:layout_constraintEnd_toEndOf="@id/name"
+            app:layout_constraintHorizontal_weight="2"
             app:layout_constraintStart_toEndOf="@id/players"
             app:layout_constraintTop_toBottomOf="@id/name"
             tools:text="14+" />
+
 
         <TextView
             android:id="@+id/description"

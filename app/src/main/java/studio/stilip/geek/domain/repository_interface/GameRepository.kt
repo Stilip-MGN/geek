@@ -6,5 +6,6 @@ import studio.stilip.geek.domain.entities.Game
 interface GameRepository {
 
     fun getAllGames(): Flow<List<Game>>
+    fun getGameById(id: String): Flow<Game>
 
 }

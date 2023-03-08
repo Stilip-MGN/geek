@@ -15,6 +15,9 @@
             app:destination="@id/navigation_sign_in"
             app:popUpTo="@id/navigation_games"
             app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/action_navigation_games_to_game_info"
+            app:destination="@id/navigation_game_info" />
     </fragment>
 
     <fragment
@@ -62,5 +65,10 @@
             app:popUpTo="@id/navigation_sign_in"
             app:popUpToInclusive="true" />
     </fragment>
+
+    <fragment
+        android:id="@+id/navigation_game_info"
+        android:name="studio.stilip.geek.app.games.gameinfo.GameInfoFragment"
+        tools:layout="@layout/fragment_game_info" />
 
 </navigation>
