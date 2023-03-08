@@ -20,4 +20,7 @@
     <string name="dimensions_length_width_height">Размеры(ДxШxВ):</string>
     <string name="weight_title">Вес:</string>
     <string name="about_box_title">О коробке</string>
+    <string name="profile_title">Профиль</string>
+    <string name="my_games_collection">Моя коллекция игр</string>
+    <string name="wishlist">Список желаний</string>
 </resources>

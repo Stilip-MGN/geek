@@ -20,9 +20,9 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
 
         val binding = FragmentProfileBinding.bind(view)
 
-        hostViewModel.setBottomBarVisible(false)
-        hostViewModel.setToolbarTitle(getText(R.string.information_about_game).toString())
-        hostViewModel.setToolbarBackBtnVisible(true)
+        hostViewModel.setBottomBarVisible(true)
+        hostViewModel.setToolbarTitle(getText(R.string.profile_title).toString())
+        hostViewModel.setToolbarBackBtnVisible(false)
 
     }
 }
