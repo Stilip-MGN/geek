@@ -2,18 +2,25 @@ package studio.stilip.geek.app.authorization
 
 import android.util.Patterns
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
 import com.google.firebase.auth.FirebaseAuthUserCollisionException
 import com.google.firebase.auth.FirebaseAuthWeakPasswordException
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.launch
 import studio.stilip.geek.R
+import studio.stilip.geek.domain.entities.User
+import studio.stilip.geek.domain.usecase.authorization.GetCurrentUserUseCase
 import studio.stilip.geek.domain.usecase.authorization.SignUpUserUseCase
+import studio.stilip.geek.domain.usecase.authorization.UpdateUserInfoUseCase
 import javax.inject.Inject
 
 @HiltViewModel
 class SignUpViewModel @Inject constructor(
     private val signUpUser: SignUpUserUseCase,
+    private val getCurrentUser: GetCurrentUserUseCase,
+    private val updateUserInfo: UpdateUserInfoUseCase,
 ) : ViewModel() {
 
     val userSignedUp = MutableStateFlow<Boolean?>(null)
@@ -29,6 +36,7 @@ class SignUpViewModel @Inject constructor(
         if (isValEmail && isValPassword && isValNickname) {
             try {
                 signUpUser(email, password)
+                updateUserInfo(email, nickname)
                 userSignedUp.value = true
             } catch (ex: FirebaseAuthWeakPasswordException) {
                 userSignedUp.value = false
@@ -40,6 +48,14 @@ class SignUpViewModel @Inject constructor(
                 editEmailHelper.value = R.string.error_email_already_exists
             }
         } else userSignedUp.value = false
+    }
+
+    private fun updateUserInfo(email: String, nickname: String) {
+        viewModelScope.launch {
+            getCurrentUser()?.let {
+                updateUserInfo(User(it.uid, nickname, email))
+            }
+        }
     }
 
     private fun validateEmail(email: String): Boolean {
