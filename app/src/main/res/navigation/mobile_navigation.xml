@@ -22,9 +22,9 @@
 
     <fragment
         android:id="@+id/navigation_home"
-        android:name="studio.stilip.geek.app.home.HomeFragment"
+        android:name="studio.stilip.geek.app.profile.ProfileFragment"
         android:label="@string/title_home"
-        tools:layout="@layout/fragment_home" />
+        tools:layout="@layout/fragment_profile" />
 
     <fragment
         android:id="@+id/navigation_notifications"
