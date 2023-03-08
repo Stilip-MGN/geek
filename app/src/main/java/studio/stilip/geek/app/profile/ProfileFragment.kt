@@ -5,7 +5,11 @@ import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.flowWithLifecycle
+import androidx.lifecycle.lifecycleScope
+import com.bumptech.glide.Glide
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 import studio.stilip.geek.R
 import studio.stilip.geek.app.HostViewModel
 import studio.stilip.geek.databinding.FragmentProfileBinding
@@ -23,6 +27,22 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
         hostViewModel.setBottomBarVisible(true)
         hostViewModel.setToolbarTitle(getText(R.string.profile_title).toString())
         hostViewModel.setToolbarBackBtnVisible(false)
+
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewModel.user
+                .flowWithLifecycle(viewLifecycleOwner.lifecycle)
+                .collect { user ->
+                    with(binding) {
+                        name.text = user.name
+                        status.text = user.status
+
+                        Glide.with(avatar)
+                            .load(user.avatar)
+                            .centerCrop()
+                            .into(avatar)
+                    }
+                }
+        }
 
     }
 }

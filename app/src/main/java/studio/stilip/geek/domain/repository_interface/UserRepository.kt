@@ -17,4 +17,6 @@ interface UserRepository {
 
     suspend fun updateUserInfo(user: User): Void
 
+    fun getUserById(id: String): Flow<User>
+
 }
