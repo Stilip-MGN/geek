@@ -28,6 +28,9 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
         hostViewModel.setToolbarTitle(getText(R.string.profile_title).toString())
         hostViewModel.setToolbarBackBtnVisible(false)
 
+        val colAdapter = GameHorizontalAdapter {}
+        val wishlistAdapter = GameHorizontalAdapter {}
+
         viewLifecycleOwner.lifecycleScope.launch {
             viewModel.user
                 .flowWithLifecycle(viewLifecycleOwner.lifecycle)
@@ -36,11 +39,30 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
                         name.text = user.name
                         status.text = user.status
 
+                        recMyGames.adapter = colAdapter
+                        recWishlist.adapter = wishlistAdapter
+
                         Glide.with(avatar)
                             .load(user.avatar)
                             .centerCrop()
                             .into(avatar)
                     }
+                }
+        }
+
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewModel.collection
+                .flowWithLifecycle(viewLifecycleOwner.lifecycle)
+                .collect { games ->
+                    colAdapter.submitList(games)
+                }
+        }
+
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewModel.wishlist
+                .flowWithLifecycle(viewLifecycleOwner.lifecycle)
+                .collect { games ->
+                    wishlistAdapter.submitList(games)
                 }
         }
 

@@ -62,4 +62,38 @@ class GameRepositoryImpl @Inject constructor(
         awaitClose { games.removeEventListener(listener) }
     }
 
+    override fun getUserCollectionGamesById(id: String): Flow<List<Game>> = callbackFlow {
+        val games = database.child("Users").child(id).child("Collection")
+        val listener = games.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                launch {
+                    send(snapshot.children.mapNotNull { it.getValue(Game::class.java) })
+                }
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                cancel("Unable take games", error.toException())
+            }
+
+        })
+        awaitClose { games.removeEventListener(listener) }
+    }
+
+    override fun getUserWishlistGamesById(id: String): Flow<List<Game>> = callbackFlow {
+        val games = database.child("Users").child(id).child("Wishlist")
+        val listener = games.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                launch {
+                    send(snapshot.children.mapNotNull { it.getValue(Game::class.java) })
+                }
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                cancel("Unable take games", error.toException())
+            }
+
+        })
+        awaitClose { games.removeEventListener(listener) }
+    }
+
 }
