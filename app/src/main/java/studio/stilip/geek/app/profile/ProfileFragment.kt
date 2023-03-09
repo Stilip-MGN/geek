@@ -7,11 +7,14 @@ import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import studio.stilip.geek.R
 import studio.stilip.geek.app.HostViewModel
+import studio.stilip.geek.app.games.gameinfo.GameInfoFragment
+import studio.stilip.geek.app.games.gameinfo.GameInfoFragment.Companion.GAME_ID
 import studio.stilip.geek.databinding.FragmentProfileBinding
 
 @AndroidEntryPoint
@@ -28,8 +31,24 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
         hostViewModel.setToolbarTitle(getText(R.string.profile_title).toString())
         hostViewModel.setToolbarBackBtnVisible(false)
 
-        val colAdapter = GameHorizontalAdapter {}
-        val wishlistAdapter = GameHorizontalAdapter {}
+        val colAdapter = GameHorizontalAdapter { id ->
+            val arg = Bundle().apply {
+                putString(GAME_ID, id)
+            }
+            findNavController().navigate(
+                R.id.action_navigation_profile_to_game_info,
+                arg
+            )
+        }
+        val wishlistAdapter = GameHorizontalAdapter { id ->
+            val arg = Bundle().apply {
+                putString(GAME_ID, id)
+            }
+            findNavController().navigate(
+                R.id.action_navigation_profile_to_game_info,
+                arg
+            )
+        }
 
         viewLifecycleOwner.lifecycleScope.launch {
             viewModel.user
