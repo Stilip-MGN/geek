@@ -63,14 +63,32 @@
             android:layout_marginTop="20dp"
             android:text="@string/my_games_collection"
             android:textAppearance="?textAppearanceHeadline5"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/btn_collection"
+            app:layout_constraintHorizontal_chainStyle="spread_inside"
+            app:layout_constraintHorizontal_weight="2"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/barrier" />
+
+        <TextView
+            android:id="@+id/btn_collection"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:layout_marginEnd="10dp"
+            android:text="Показать все"
+            android:textAppearance="?textAppearanceBody1"
+            android:textColor="?colorPrimaryVariant"
+            app:layout_constraintBaseline_toBaselineOf="@id/my_games_title"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1"
+            app:layout_constraintHorizontal_weight="1"
+            app:layout_constraintStart_toEndOf="@id/my_games_title" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rec_my_games"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
             android:clipToPadding="false"
             android:orientation="horizontal"
             android:paddingStart="20dp"
@@ -87,14 +105,32 @@
             android:layout_marginTop="10dp"
             android:text="@string/wishlist"
             android:textAppearance="?textAppearanceHeadline5"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/btn_wishlist"
+            app:layout_constraintHorizontal_chainStyle="spread_inside"
+            app:layout_constraintHorizontal_weight="2"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/rec_my_games" />
+
+        <TextView
+            android:id="@+id/btn_wishlist"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:layout_marginEnd="10dp"
+            android:text="Показать все"
+            android:textAppearance="?textAppearanceBody1"
+            android:textColor="?colorPrimaryVariant"
+            app:layout_constraintBaseline_toBaselineOf="@id/wishlist_title"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0"
+            app:layout_constraintHorizontal_weight="1"
+            app:layout_constraintStart_toEndOf="@id/wishlist_title" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rec_wishlist"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
             android:clipToPadding="false"
             android:orientation="horizontal"
             android:paddingStart="20dp"
