@@ -77,6 +77,15 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
             )
         }
 
+        with(binding) {
+            recMyGames.adapter = colAdapter
+            recWishlist.adapter = wishlistAdapter
+
+            btnCollection.setOnClickListener {
+                findNavController().navigate(R.id.action_navigation_profile_to_collection)
+            }
+        }
+
         viewLifecycleOwner.lifecycleScope.launch {
             viewModel.user
                 .flowWithLifecycle(viewLifecycleOwner.lifecycle)
@@ -84,9 +93,6 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
                     with(binding) {
                         name.text = user.name
                         status.text = user.status
-
-                        recMyGames.adapter = colAdapter
-                        recWishlist.adapter = wishlistAdapter
 
                         Glide.with(avatar)
                             .load(user.avatar)

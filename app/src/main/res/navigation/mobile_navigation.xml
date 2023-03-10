@@ -24,10 +24,13 @@
         android:id="@+id/navigation_profile"
         android:name="studio.stilip.geek.app.profile.ProfileFragment"
         android:label="@string/profile_title"
-        tools:layout="@layout/fragment_profile" >
+        tools:layout="@layout/fragment_profile">
         <action
             android:id="@+id/action_navigation_profile_to_game_info"
             app:destination="@id/navigation_game_info" />
+        <action
+            android:id="@+id/action_navigation_profile_to_collection"
+            app:destination="@id/navigation_collection" />
     </fragment>
 
     <fragment
@@ -74,5 +77,14 @@
         android:id="@+id/navigation_game_info"
         android:name="studio.stilip.geek.app.games.gameinfo.GameInfoFragment"
         tools:layout="@layout/fragment_game_info" />
+
+    <fragment
+        android:id="@+id/navigation_collection"
+        android:name="studio.stilip.geek.app.profile.collection.CollectionFragment"
+        tools:layout="@layout/fragment_collection">
+        <action
+            android:id="@+id/action_navigation_collection_to_game_info"
+            app:destination="@id/navigation_game_info" />
+    </fragment>
 
 </navigation>
