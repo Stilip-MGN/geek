@@ -84,6 +84,10 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
             btnCollection.setOnClickListener {
                 findNavController().navigate(R.id.action_navigation_profile_to_collection)
             }
+
+            btnWishlist.setOnClickListener {
+                findNavController().navigate(R.id.action_navigation_profile_to_wishlist)
+            }
         }
 
         viewLifecycleOwner.lifecycleScope.launch {

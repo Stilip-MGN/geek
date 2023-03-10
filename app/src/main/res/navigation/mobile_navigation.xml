@@ -31,6 +31,9 @@
         <action
             android:id="@+id/action_navigation_profile_to_collection"
             app:destination="@id/navigation_collection" />
+        <action
+            android:id="@+id/action_navigation_profile_to_wishlist"
+            app:destination="@id/navigation_wishlist" />
     </fragment>
 
     <fragment
@@ -84,6 +87,15 @@
         tools:layout="@layout/fragment_collection">
         <action
             android:id="@+id/action_navigation_collection_to_game_info"
+            app:destination="@id/navigation_game_info" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_wishlist"
+        android:name="studio.stilip.geek.app.profile.wishlist.WishlistFragment"
+        tools:layout="@layout/fragment_wishlist">
+        <action
+            android:id="@+id/action_navigation_wishlist_to_game_info"
             app:destination="@id/navigation_game_info" />
     </fragment>
 
