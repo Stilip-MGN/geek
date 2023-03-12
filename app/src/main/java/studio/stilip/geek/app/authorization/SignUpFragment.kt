@@ -68,12 +68,21 @@ class SignUpFragment : Fragment(R.layout.fragment_sign_up) {
                     }
             }
 
+            viewLifecycleOwner.lifecycleScope.launch {
+                viewModel.editNicknameHelper
+                    .flowWithLifecycle(viewLifecycleOwner.lifecycle)
+                    .collect { res ->
+                        editNicknameLayout.helperText = getText(res)
+                    }
+            }
+
             btnSignUp.setOnClickListener {
                 val email = editEmail.text.toString().trim()
                 val password = editPassword.text.toString().trim()
+                val nickname = editNickname.text.toString().trim()
 
                 viewLifecycleOwner.lifecycleScope.launch {
-                    viewModel.signUp(email, password)
+                    viewModel.signUp(email, password, nickname)
                 }
             }
         }

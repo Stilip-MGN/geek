@@ -1,8 +1,8 @@
-package studio.stilip.geek.app.games
+package studio.stilip.geek.app.profile.wishlist
 
 import android.os.Bundle
-import android.view.View
 import androidx.fragment.app.Fragment
+import android.view.View
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.flowWithLifecycle
@@ -12,55 +12,45 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import studio.stilip.geek.R
 import studio.stilip.geek.app.HostViewModel
-import studio.stilip.geek.app.games.gameinfo.GameInfoFragment.Companion.GAME_ID
-import studio.stilip.geek.databinding.FragmentGamesBinding
+import studio.stilip.geek.app.games.GameAdapter
+import studio.stilip.geek.app.games.gameinfo.GameInfoFragment
+import studio.stilip.geek.databinding.FragmentWishlistBinding
 
 @AndroidEntryPoint
-class GamesFragment : Fragment(R.layout.fragment_games) {
+class WishlistFragment : Fragment(R.layout.fragment_collection) {
 
     private val hostViewModel: HostViewModel by activityViewModels()
-    private val viewModel: GamesViewModel by viewModels()
+    private val viewModel: WishlistViewModel by viewModels()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val binding = FragmentGamesBinding.bind(view)
+        val binding = FragmentWishlistBinding.bind(view)
 
-        hostViewModel.setBottomBarVisible(true)
-        hostViewModel.setToolbarTitle(getText(R.string.title_games).toString())
-        hostViewModel.setToolbarBackBtnVisible(false)
+        hostViewModel.setBottomBarVisible(false)
+        hostViewModel.setToolbarTitle(getText(R.string.wishlist).toString())
+        hostViewModel.setToolbarBackBtnVisible(true)
 
         val adapter = GameAdapter { id ->
             val arg = Bundle().apply {
-                putString(GAME_ID, id)
+                putString(GameInfoFragment.GAME_ID, id)
             }
             findNavController().navigate(
-                R.id.action_navigation_games_to_game_info,
+                R.id.action_navigation_wishlist_to_game_info,
                 arg
             )
-        }
-
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewModel.user.flowWithLifecycle(viewLifecycleOwner.lifecycle)
-                .collect { user ->
-                    if (user == null) {
-                        findNavController().navigate(R.id.action_navigation_games_to_signIn)
-                    }
-                }
-        }
-
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewModel.games
-                .flowWithLifecycle(viewLifecycleOwner.lifecycle)
-                .collect { games ->
-                    adapter.submitList(games)
-                }
         }
 
         with(binding) {
             recGames.adapter = adapter
         }
 
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewModel.wishlist
+                .flowWithLifecycle(viewLifecycleOwner.lifecycle)
+                .collect { games ->
+                    adapter.submitList(games)
+                }
+        }
     }
-
 }
