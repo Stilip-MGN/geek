@@ -13,6 +13,7 @@ import kotlinx.coroutines.launch
 import studio.stilip.geek.R
 import studio.stilip.geek.app.HostViewModel
 import studio.stilip.geek.app.games.gameinfo.GameInfoFragment.Companion.GAME_ID
+import studio.stilip.geek.data.UserCacheManager
 import studio.stilip.geek.databinding.FragmentGamesBinding
 
 @AndroidEntryPoint
@@ -45,6 +46,8 @@ class GamesFragment : Fragment(R.layout.fragment_games) {
                 .collect { user ->
                     if (user == null) {
                         findNavController().navigate(R.id.action_navigation_games_to_signIn)
+                    } else {
+                        UserCacheManager.setUserId(user.uid)
                     }
                 }
         }
