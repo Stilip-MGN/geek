@@ -26,4 +26,9 @@
     <string name="nickname">ФИО/никнейм</string>
     <string name="edit_title">Изменить</string>
     <string name="show_all">Показать все</string>
+    <string name="description_title">Описание</string>
+    <string name="game">Игра</string>
+    <string name="place">Место</string>
+    <string name="time">Время</string>
+    <string name="members">Участники</string>
 </resources>
