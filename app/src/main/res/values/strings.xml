@@ -2,7 +2,7 @@
     <string name="app_name">Geek</string>
     <string name="title_home">Home</string>
     <string name="title_games">Игры</string>
-    <string name="title_notifications">Notifications</string>
+    <string name="title_events">Мероприятия</string>
     <string name="email">Почта</string>
     <string name="password">Пароль</string>
     <string name="enter">Войти</string>
