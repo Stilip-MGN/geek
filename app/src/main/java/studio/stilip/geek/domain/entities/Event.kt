@@ -7,4 +7,6 @@ data class Event(
     val gameName: String = "",
     val place: String = "",
     val date: String = "",
+    val description: String = "",
+    val maxMembers: Int = 0,
 )

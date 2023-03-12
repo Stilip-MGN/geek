@@ -7,10 +7,12 @@ import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import studio.stilip.geek.R
 import studio.stilip.geek.app.HostViewModel
+import studio.stilip.geek.app.events.event.EventFragment.Companion.EVENT_ID
 import studio.stilip.geek.databinding.FragmentEventsBinding
 
 @AndroidEntryPoint
@@ -28,7 +30,15 @@ class EventsFragment : Fragment(R.layout.fragment_events) {
         hostViewModel.setToolbarTitle(getText(R.string.title_events).toString())
         hostViewModel.setToolbarBackBtnVisible(false)
 
-        val adapter = EventAdapter {}
+        val adapter = EventAdapter { id ->
+            val arg = Bundle().apply {
+                putString(EVENT_ID, id)
+            }
+            findNavController().navigate(
+                R.id.action_navigation_events_to_event,
+                arg
+            )
+        }
 
         with(binding) {
             recEvents.adapter = adapter

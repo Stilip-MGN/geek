@@ -2,6 +2,7 @@ package studio.stilip.geek.domain.repository_interface
 
 import kotlinx.coroutines.flow.Flow
 import studio.stilip.geek.domain.entities.Event
+import studio.stilip.geek.domain.entities.User
 
 interface EventRepository {
 
@@ -9,4 +10,5 @@ interface EventRepository {
 
     fun getEventById(id: String): Flow<Event>
 
+    fun getMembersByEventId(id: String): Flow<List<User>>
 }

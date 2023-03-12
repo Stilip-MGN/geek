@@ -40,7 +40,11 @@
         android:id="@+id/navigation_events"
         android:name="studio.stilip.geek.app.events.EventsFragment"
         android:label="@string/title_events"
-        tools:layout="@layout/fragment_events" />
+        tools:layout="@layout/fragment_events">
+        <action
+            android:id="@+id/action_navigation_events_to_event"
+            app:destination="@id/navigation_event" />
+    </fragment>
 
     <fragment
         android:id="@+id/navigation_sign_up"
@@ -98,5 +102,10 @@
             android:id="@+id/action_navigation_wishlist_to_game_info"
             app:destination="@id/navigation_game_info" />
     </fragment>
+
+    <fragment
+        android:id="@+id/navigation_event"
+        android:name="studio.stilip.geek.app.events.event.EventFragment"
+        tools:layout="@layout/fragment_event" />
 
 </navigation>
