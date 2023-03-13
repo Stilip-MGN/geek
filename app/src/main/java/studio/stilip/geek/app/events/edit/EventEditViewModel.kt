@@ -1,4 +1,4 @@
-package studio.stilip.geek.app.events.event
+package studio.stilip.geek.app.events.edit
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
@@ -15,7 +15,7 @@ import studio.stilip.geek.domain.usecase.game.GetGameByIdUseCase
 import javax.inject.Inject
 
 @HiltViewModel
-class EventViewModel @Inject constructor(
+class EventEditViewModel @Inject constructor(
     private val getEvent: GetEventByIdUseCase,
     private val getGameById: GetGameByIdUseCase,
     private val getMembersByEventId: GetMembersByEventIdUseCase,
@@ -23,10 +23,9 @@ class EventViewModel @Inject constructor(
 ) : ViewModel() {
 
     private val _game = MutableStateFlow(Game())
-    val eventId: String = stateHandle[EVENT_ID]!!
 
     val game: StateFlow<Game> = _game
-    val event = getEvent(eventId)
+    val event = getEvent(stateHandle[EVENT_ID]!!)
         .stateIn(viewModelScope, SharingStarted.Eagerly, Event())
     val members = getMembersByEventId(stateHandle[EVENT_ID]!!)
         .stateIn(viewModelScope, SharingStarted.Eagerly, emptyList())

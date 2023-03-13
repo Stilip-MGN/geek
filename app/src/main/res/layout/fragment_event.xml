@@ -15,6 +15,7 @@
             android:id="@+id/event_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
             android:paddingHorizontal="20dp"
             android:textAppearance="@style/TextAppearance.MaterialComponents.Headline5"
             app:layout_constraintTop_toTopOf="parent"
@@ -50,6 +51,7 @@
             android:paddingHorizontal="20dp"
             android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
             app:layout_constraintBottom_toBottomOf="@id/game_logo"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/game_logo"
             app:layout_constraintTop_toTopOf="@id/game_logo"
             tools:text="Unmatched" />

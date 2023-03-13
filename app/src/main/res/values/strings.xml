@@ -32,4 +32,6 @@
     <string name="place">Место</string>
     <string name="time">Время</string>
     <string name="members">Участники</string>
+    <string name="name_event">Название мероприятия</string>
+    <string name="max_count_members">Максимальное число участников</string>
 </resources>

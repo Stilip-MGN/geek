@@ -106,6 +106,21 @@
     <fragment
         android:id="@+id/navigation_event"
         android:name="studio.stilip.geek.app.events.event.EventFragment"
-        tools:layout="@layout/fragment_event" />
+        tools:layout="@layout/fragment_event">
+        <action
+            android:id="@+id/action_navigation_event_to_event_edit"
+            app:destination="@id/navigation_event_edit" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_event_edit"
+        android:name="studio.stilip.geek.app.events.edit.EventEditFragment"
+        tools:layout="@layout/fragment_event_edit">
+        <action
+            android:id="@+id/action_navigation_event_edit_to_event"
+            app:destination="@id/navigation_event"
+            app:popUpTo="@id/navigation_event"
+            app:popUpToInclusive="true" />
+    </fragment>
 
 </navigation>

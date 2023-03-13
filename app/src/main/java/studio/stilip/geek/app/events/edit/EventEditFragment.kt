@@ -1,64 +1,30 @@
-package studio.stilip.geek.app.events.event
+package studio.stilip.geek.app.events.edit
 
-import android.content.Context
 import android.os.Bundle
-import android.view.Menu
-import android.view.MenuInflater
-import android.view.MenuItem
 import android.view.View
-import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
-import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import studio.stilip.geek.R
 import studio.stilip.geek.app.HostViewModel
-import studio.stilip.geek.databinding.FragmentEventBinding
+import studio.stilip.geek.app.events.event.MemberAdapter
+import studio.stilip.geek.databinding.FragmentEventEditBinding
 
 @AndroidEntryPoint
-class EventFragment : Fragment(R.layout.fragment_event) {
+class EventEditFragment : Fragment(R.layout.fragment_event_edit) {
 
     private val hostViewModel: HostViewModel by activityViewModels()
-    private val viewModel: EventViewModel by viewModels()
-
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        context as AppCompatActivity
-
-        context.addMenuProvider(object : MenuProvider {
-            override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
-                menuInflater.inflate(R.menu.edit_menu, menu)
-            }
-
-            override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
-                return when (menuItem.itemId) {
-                    R.id.menu_edit -> {
-                        val arg = Bundle().apply {
-                            putString(EVENT_ID, viewModel.eventId)
-                        }
-                        findNavController().navigate(
-                            R.id.action_navigation_event_to_event_edit,
-                            arg
-                        )
-                        true
-                    }
-                    else -> false
-                }
-            }
-        }, this, Lifecycle.State.RESUMED)
-    }
+    private val viewModel: EventEditViewModel by viewModels()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val binding = FragmentEventBinding.bind(view)
+        val binding = FragmentEventEditBinding.bind(view)
 
         hostViewModel.setBottomBarVisible(false)
         hostViewModel.setToolbarTitle(getText(R.string.title_event).toString())
@@ -77,11 +43,11 @@ class EventFragment : Fragment(R.layout.fragment_event) {
                 .flowWithLifecycle(viewLifecycleOwner.lifecycle)
                 .collect { event ->
                     with(binding) {
-                        eventName.text = event.eventName
-                        place.text = event.place
-                        description.text = event.description
-                        date.text = event.date
-                        membersCount.text = "/${event.maxMembers}"
+                        editEventName.setText(event.eventName)
+                        editPlace.setText(event.place)
+                        editDescription.setText(event.description)
+                        editDate.setText(event.date)
+                        editMembersCount.setText(event.maxMembers.toString())
                     }
                 }
         }
@@ -91,9 +57,6 @@ class EventFragment : Fragment(R.layout.fragment_event) {
                 .flowWithLifecycle(viewLifecycleOwner.lifecycle)
                 .collect { members ->
                     adapter.submitList(members)
-                    with(binding) {
-                        membersCount.text = "${members.count()}${membersCount.text}"
-                    }
                 }
         }
 
@@ -111,9 +74,5 @@ class EventFragment : Fragment(R.layout.fragment_event) {
                     }
                 }
         }
-    }
-
-    companion object {
-        const val EVENT_ID = "event_id"
     }
 }
