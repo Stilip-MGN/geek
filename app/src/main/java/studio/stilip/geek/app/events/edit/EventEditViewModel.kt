@@ -23,11 +23,12 @@ class EventEditViewModel @Inject constructor(
 ) : ViewModel() {
 
     private val _game = MutableStateFlow(Game())
+    val eventId: String = stateHandle[EVENT_ID]!!
 
     val game: StateFlow<Game> = _game
-    val event = getEvent(stateHandle[EVENT_ID]!!)
+    val event = getEvent(eventId)
         .stateIn(viewModelScope, SharingStarted.Eagerly, Event())
-    val members = getMembersByEventId(stateHandle[EVENT_ID]!!)
+    val members = getMembersByEventId(eventId)
         .stateIn(viewModelScope, SharingStarted.Eagerly, emptyList())
 
     init {
