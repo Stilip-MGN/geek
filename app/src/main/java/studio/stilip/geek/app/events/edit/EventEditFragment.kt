@@ -2,10 +2,7 @@ package studio.stilip.geek.app.events.edit
 
 import android.content.Context
 import android.os.Bundle
-import android.view.Menu
-import android.view.MenuInflater
-import android.view.MenuItem
-import android.view.View
+import android.view.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
@@ -15,8 +12,9 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
-import com.bumptech.glide.Glide
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
 import studio.stilip.geek.R
 import studio.stilip.geek.app.HostViewModel
@@ -70,8 +68,11 @@ class EventEditFragment : Fragment(R.layout.fragment_event_edit) {
             //TODO Страница пользователей
         }
 
+        val adapterGames = GameSpinnerAdapter(this@EventEditFragment.context!!)
+
         with(binding) {
             recMembers.adapter = adapter
+            spinner.adapter = adapterGames
         }
 
         viewLifecycleOwner.lifecycleScope.launch {
@@ -97,18 +98,20 @@ class EventEditFragment : Fragment(R.layout.fragment_event_edit) {
         }
 
         viewLifecycleOwner.lifecycleScope.launch {
-            viewModel.game
+            viewModel.event.combine(viewModel.games) { event, games ->
+                event to games
+            }
                 .flowWithLifecycle(viewLifecycleOwner.lifecycle)
-                .collect { game ->
-                    with(binding) {
-                        gameName.text = game.name
-
-                        Glide.with(gameLogo)
-                            .load(game.logo)
-                            .centerCrop()
-                            .into(gameLogo)
+                .collectLatest { (event, games) ->
+                    if (games.isNotEmpty()) {
+                        adapterGames.addAll(games)
+                        val game = games.first { g -> g.id == event.gameId }
+                        with(binding) {
+                            spinner.setSelection(games.lastIndexOf(game))
+                        }
                     }
                 }
+
         }
     }
 }

@@ -11,6 +11,7 @@ import studio.stilip.geek.domain.entities.Event
 import studio.stilip.geek.domain.entities.Game
 import studio.stilip.geek.domain.usecase.event.GetEventByIdUseCase
 import studio.stilip.geek.domain.usecase.event.GetMembersByEventIdUseCase
+import studio.stilip.geek.domain.usecase.game.GetAllGamesUserUseCase
 import studio.stilip.geek.domain.usecase.game.GetGameByIdUseCase
 import javax.inject.Inject
 
@@ -19,6 +20,7 @@ class EventEditViewModel @Inject constructor(
     private val getEvent: GetEventByIdUseCase,
     private val getGameById: GetGameByIdUseCase,
     private val getMembersByEventId: GetMembersByEventIdUseCase,
+    private val getAllGames: GetAllGamesUserUseCase,
     stateHandle: SavedStateHandle
 ) : ViewModel() {
 
@@ -29,6 +31,8 @@ class EventEditViewModel @Inject constructor(
     val event = getEvent(eventId)
         .stateIn(viewModelScope, SharingStarted.Eagerly, Event())
     val members = getMembersByEventId(eventId)
+        .stateIn(viewModelScope, SharingStarted.Eagerly, emptyList())
+    val games = getAllGames()
         .stateIn(viewModelScope, SharingStarted.Eagerly, emptyList())
 
     init {

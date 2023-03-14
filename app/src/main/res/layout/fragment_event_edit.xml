@@ -48,29 +48,16 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/edit_event_name_layout" />
 
-        <com.google.android.material.imageview.ShapeableImageView
-            android:id="@+id/game_logo"
-            android:layout_width="75dp"
-            android:layout_height="75dp"
-            android:layout_marginStart="10dp"
-            android:layout_marginTop="5dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/game_title"
-            app:shapeAppearanceOverlay="@style/roundedImageViewRounded"
-            tools:srcCompat="@tools:sample/avatars" />
-
-        <TextView
-            android:id="@+id/game_name"
+        <Spinner
+            android:id="@+id/spinner"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:paddingHorizontal="20dp"
-            android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
-            app:layout_constrainedWidth="true"
-            app:layout_constraintBottom_toBottomOf="@id/game_logo"
+            android:layout_marginHorizontal="5dp"
+            android:spinnerMode="dropdown"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/game_logo"
-            app:layout_constraintTop_toTopOf="@id/game_logo"
-            tools:text="Unmatched" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/game_title"
+            tools:listitem="@layout/spinner_game" />
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/edit_description_layout"
@@ -85,7 +72,7 @@
             app:boxCornerRadiusTopStart="10dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/game_logo">
+            app:layout_constraintTop_toBottomOf="@id/spinner">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/edit_description"
