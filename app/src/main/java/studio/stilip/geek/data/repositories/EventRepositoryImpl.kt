@@ -9,6 +9,7 @@ import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
 import studio.stilip.geek.domain.entities.Event
 import studio.stilip.geek.domain.entities.User
 import studio.stilip.geek.domain.repository_interface.EventRepository
@@ -69,5 +70,19 @@ class EventRepositoryImpl @Inject constructor(
 
         })
         awaitClose { members.removeEventListener(listener) }
+    }
+
+    override suspend fun updateEvent(event: Event) {
+        database.child("Events").child(event.id).updateChildren(
+            mapOf(
+                "eventName" to event.eventName,
+                "gameId" to event.gameId,
+                "gameName" to event.gameName,
+                "maxMembers" to event.maxMembers,
+                "date" to event.date,
+                "description" to event.description,
+                "place" to event.place,
+            )
+        ).await()
     }
 }

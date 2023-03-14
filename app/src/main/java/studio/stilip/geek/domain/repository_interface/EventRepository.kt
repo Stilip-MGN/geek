@@ -11,4 +11,6 @@ interface EventRepository {
     fun getEventById(id: String): Flow<Event>
 
     fun getMembersByEventId(id: String): Flow<List<User>>
+
+    suspend fun updateEvent(event: Event)
 }

@@ -21,12 +21,16 @@ import studio.stilip.geek.app.HostViewModel
 import studio.stilip.geek.app.events.event.EventFragment
 import studio.stilip.geek.app.events.event.MemberAdapter
 import studio.stilip.geek.databinding.FragmentEventEditBinding
+import studio.stilip.geek.domain.entities.Event
+import studio.stilip.geek.domain.entities.Game
 
 @AndroidEntryPoint
 class EventEditFragment : Fragment(R.layout.fragment_event_edit) {
 
     private val hostViewModel: HostViewModel by activityViewModels()
     private val viewModel: EventEditViewModel by viewModels()
+
+    lateinit var binding: FragmentEventEditBinding
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -40,6 +44,7 @@ class EventEditFragment : Fragment(R.layout.fragment_event_edit) {
             override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
                 return when (menuItem.itemId) {
                     R.id.menu_done -> {
+                        viewModel.update(collectNewEvent())
                         val arg = Bundle().apply {
                             putString(EventFragment.EVENT_ID, viewModel.eventId)
                         }
@@ -58,7 +63,7 @@ class EventEditFragment : Fragment(R.layout.fragment_event_edit) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val binding = FragmentEventEditBinding.bind(view)
+        binding = FragmentEventEditBinding.bind(view)
 
         hostViewModel.setBottomBarVisible(false)
         hostViewModel.setToolbarTitle(getText(R.string.title_event).toString())
@@ -114,4 +119,29 @@ class EventEditFragment : Fragment(R.layout.fragment_event_edit) {
 
         }
     }
+
+    private fun collectNewEvent(): Event {
+        with(binding) {
+            val id = viewModel.eventId
+            val eventName = editEventName.text.toString()
+            val gameId = (spinner.selectedItem as Game).id
+            val gameName = (spinner.selectedItem as Game).name
+            val place = editPlace.text.toString()
+            val description = editDescription.text.toString()
+            val date = editDate.text.toString()
+            val maxMembers = editMembersCount.text.toString().toInt()
+
+            return Event(
+                id = id,
+                eventName = eventName,
+                gameId = gameId,
+                gameName = gameName,
+                place = place,
+                date = date,
+                description = description,
+                maxMembers = maxMembers
+            )
+        }
+    }
+
 }
