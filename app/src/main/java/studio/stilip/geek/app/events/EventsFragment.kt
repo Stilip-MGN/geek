@@ -42,6 +42,12 @@ class EventsFragment : Fragment(R.layout.fragment_events) {
 
         with(binding) {
             recEvents.adapter = adapter
+
+            btnAdd.setOnClickListener {
+                findNavController().navigate(
+                    R.id.action_navigation_events_to_event_create
+                )
+            }
         }
 
         viewLifecycleOwner.lifecycleScope.launch {

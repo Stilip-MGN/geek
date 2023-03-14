@@ -85,4 +85,9 @@ class EventRepositoryImpl @Inject constructor(
             )
         ).await()
     }
+
+    override suspend fun createEvent(event: Event) {
+        val ref = database.child("Events").push()
+        ref.setValue(event.copy(id = ref.key!!)).await()
+    }
 }
