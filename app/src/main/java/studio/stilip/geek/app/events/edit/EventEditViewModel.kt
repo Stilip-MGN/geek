@@ -8,6 +8,7 @@ import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import studio.stilip.geek.app.events.event.EventFragment.Companion.EVENT_ID
 import studio.stilip.geek.domain.entities.Event
+import studio.stilip.geek.domain.usecase.event.DeleteEventUseCase
 import studio.stilip.geek.domain.usecase.event.GetEventByIdUseCase
 import studio.stilip.geek.domain.usecase.event.GetMembersByEventIdUseCase
 import studio.stilip.geek.domain.usecase.event.UpdateEventUseCase
@@ -20,6 +21,7 @@ class EventEditViewModel @Inject constructor(
     private val getMembersByEventId: GetMembersByEventIdUseCase,
     private val getAllGames: GetAllGamesUserUseCase,
     private val updateEvent: UpdateEventUseCase,
+    private val deleteEvent: DeleteEventUseCase,
     stateHandle: SavedStateHandle
 ) : ViewModel() {
 
@@ -36,6 +38,12 @@ class EventEditViewModel @Inject constructor(
     fun update(event: Event) {
         viewModelScope.launch {
             updateEvent(event)
+        }
+    }
+
+    fun delete() {
+        viewModelScope.launch {
+            deleteEvent(eventId)
         }
     }
 }

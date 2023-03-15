@@ -124,6 +124,11 @@
             app:destination="@id/navigation_event"
             app:popUpTo="@id/navigation_event"
             app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/action_navigation_event_edit_to_events"
+            app:destination="@id/navigation_events"
+            app:popUpTo="@id/navigation_events"
+            app:popUpToInclusive="true"/>
     </fragment>
 
     <fragment

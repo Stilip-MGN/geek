@@ -36,4 +36,5 @@
     <string name="max_count_members">Максимальное число участников</string>
     <string name="save">Сохранить</string>
     <string name="create">Создавать</string>
+    <string name="delete_title">Удалить</string>
 </resources>

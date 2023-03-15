@@ -38,7 +38,7 @@ class EventEditFragment : Fragment(R.layout.fragment_event_edit) {
 
         context.addMenuProvider(object : MenuProvider {
             override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
-                menuInflater.inflate(R.menu.done_menu, menu)
+                menuInflater.inflate(R.menu.delete_done_menu, menu)
             }
 
             override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
@@ -51,6 +51,13 @@ class EventEditFragment : Fragment(R.layout.fragment_event_edit) {
                         findNavController().navigate(
                             R.id.action_navigation_event_edit_to_event,
                             arg
+                        )
+                        true
+                    }
+                    R.id.menu_delete -> {
+                        viewModel.delete()
+                        findNavController().navigate(
+                            R.id.action_navigation_event_edit_to_events,
                         )
                         true
                     }

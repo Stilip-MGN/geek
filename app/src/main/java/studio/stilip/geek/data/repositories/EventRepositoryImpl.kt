@@ -90,4 +90,8 @@ class EventRepositoryImpl @Inject constructor(
         val ref = database.child("Events").push()
         ref.setValue(event.copy(id = ref.key!!)).await()
     }
+
+    override suspend fun deleteEvent(id: String) {
+        database.child("Events").child(id).removeValue()
+    }
 }
