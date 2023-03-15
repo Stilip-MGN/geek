@@ -3,8 +3,10 @@ package studio.stilip.geek.app.events.edit
 import android.content.Context
 import android.os.Bundle
 import android.view.*
+import android.widget.AdapterView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.MenuProvider
+import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
@@ -21,7 +23,6 @@ import studio.stilip.geek.app.HostViewModel
 import studio.stilip.geek.app.events.event.EventFragment
 import studio.stilip.geek.app.events.event.MemberAdapter
 import studio.stilip.geek.databinding.FragmentEventEditBinding
-import studio.stilip.geek.domain.entities.Event
 import studio.stilip.geek.domain.entities.Game
 
 @AndroidEntryPoint
@@ -44,14 +45,8 @@ class EventEditFragment : Fragment(R.layout.fragment_event_edit) {
             override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
                 return when (menuItem.itemId) {
                     R.id.menu_done -> {
-                        viewModel.update(collectNewEvent())
-                        val arg = Bundle().apply {
-                            putString(EventFragment.EVENT_ID, viewModel.eventId)
-                        }
-                        findNavController().navigate(
-                            R.id.action_navigation_event_edit_to_event,
-                            arg
-                        )
+                        //viewModel.update(collectNewEvent())
+                        viewModel.onCompleteClicked()
                         true
                     }
                     R.id.menu_delete -> {
@@ -85,6 +80,67 @@ class EventEditFragment : Fragment(R.layout.fragment_event_edit) {
         with(binding) {
             recMembers.adapter = adapter
             spinner.adapter = adapterGames
+
+            editEventName.doOnTextChanged { text, _, _, _ ->
+                viewModel.onEventNameChanged(text.toString())
+            }
+
+            editDate.doOnTextChanged { text, _, _, _ ->
+                viewModel.onDateChanged(text.toString())
+            }
+
+            editDescription.doOnTextChanged { text, _, _, _ ->
+                viewModel.onDescriptionChanged(text.toString())
+            }
+
+            editPlace.doOnTextChanged { text, _, _, _ ->
+                viewModel.onPlaceChanged(text.toString())
+            }
+
+            editMembersCount.doOnTextChanged { text, _, _, _ ->
+                viewModel.onMaxMembersChanged(text.toString())
+            }
+
+            spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+                override fun onNothingSelected(parent: AdapterView<*>?) {}
+
+                override fun onItemSelected(
+                    parent: AdapterView<*>?,
+                    view: View?,
+                    position: Int,
+                    id: Long
+                ) {
+                    viewModel.onGameChanged(spinner.selectedItem as Game)
+                }
+            }
+
+            viewLifecycleOwner.lifecycleScope.launch {
+                viewModel.eventNameHelper
+                    .flowWithLifecycle(viewLifecycleOwner.lifecycle)
+                    .collect { res ->
+                        editEventNameLayout.helperText = getText(res)
+                    }
+            }
+        }
+
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewModel.eventUpdated
+                .flowWithLifecycle(viewLifecycleOwner.lifecycle)
+                .collect { isSuccess ->
+                    when (isSuccess) {
+                        true -> {
+                            val arg = Bundle().apply {
+                                putString(EventFragment.EVENT_ID, viewModel.eventId)
+                            }
+                            findNavController().navigate(
+                                R.id.action_navigation_event_edit_to_event,
+                                arg
+                            )
+                        }
+                        false -> {}
+                        null -> {}
+                    }
+                }
         }
 
         viewLifecycleOwner.lifecycleScope.launch {
@@ -124,30 +180,6 @@ class EventEditFragment : Fragment(R.layout.fragment_event_edit) {
                     }
                 }
 
-        }
-    }
-
-    private fun collectNewEvent(): Event {
-        with(binding) {
-            val id = viewModel.eventId
-            val eventName = editEventName.text.toString()
-            val gameId = (spinner.selectedItem as Game).id
-            val gameName = (spinner.selectedItem as Game).name
-            val place = editPlace.text.toString()
-            val description = editDescription.text.toString()
-            val date = editDate.text.toString()
-            val maxMembers = editMembersCount.text.toString().toInt()
-
-            return Event(
-                id = id,
-                eventName = eventName,
-                gameId = gameId,
-                gameName = gameName,
-                place = place,
-                date = date,
-                description = description,
-                maxMembers = maxMembers
-            )
         }
     }
 
