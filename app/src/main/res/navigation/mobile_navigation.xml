@@ -37,10 +37,17 @@
     </fragment>
 
     <fragment
-        android:id="@+id/navigation_notifications"
-        android:name="studio.stilip.geek.app.notifications.NotificationsFragment"
-        android:label="@string/title_notifications"
-        tools:layout="@layout/fragment_notifications" />
+        android:id="@+id/navigation_events"
+        android:name="studio.stilip.geek.app.events.EventsFragment"
+        android:label="@string/title_events"
+        tools:layout="@layout/fragment_events">
+        <action
+            android:id="@+id/action_navigation_events_to_event"
+            app:destination="@id/navigation_event" />
+        <action
+            android:id="@+id/action_navigation_events_to_event_create"
+            app:destination="@id/navigation_event_create" />
+    </fragment>
 
     <fragment
         android:id="@+id/navigation_sign_up"
@@ -97,6 +104,42 @@
         <action
             android:id="@+id/action_navigation_wishlist_to_game_info"
             app:destination="@id/navigation_game_info" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_event"
+        android:name="studio.stilip.geek.app.events.event.EventFragment"
+        tools:layout="@layout/fragment_event">
+        <action
+            android:id="@+id/action_navigation_event_to_event_edit"
+            app:destination="@id/navigation_event_edit" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_event_edit"
+        android:name="studio.stilip.geek.app.events.edit.EventEditFragment"
+        tools:layout="@layout/fragment_event_edit">
+        <action
+            android:id="@+id/action_navigation_event_edit_to_event"
+            app:destination="@id/navigation_event"
+            app:popUpTo="@id/navigation_event"
+            app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/action_navigation_event_edit_to_events"
+            app:destination="@id/navigation_events"
+            app:popUpTo="@id/navigation_events"
+            app:popUpToInclusive="true"/>
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_event_create"
+        android:name="studio.stilip.geek.app.events.create.EventCreateFragment"
+        tools:layout="@layout/fragment_event_create">
+        <action
+            android:id="@+id/action_navigation_event_create_to_events"
+            app:destination="@id/navigation_events"
+            app:popUpTo="@id/navigation_events"
+            app:popUpToInclusive="true" />
     </fragment>
 
 </navigation>

@@ -2,7 +2,8 @@
     <string name="app_name">Geek</string>
     <string name="title_home">Home</string>
     <string name="title_games">Игры</string>
-    <string name="title_notifications">Notifications</string>
+    <string name="title_events">Мероприятия</string>
+    <string name="title_event">Мероприятие</string>
     <string name="email">Почта</string>
     <string name="password">Пароль</string>
     <string name="enter">Войти</string>
@@ -26,4 +27,15 @@
     <string name="nickname">ФИО/никнейм</string>
     <string name="edit_title">Изменить</string>
     <string name="show_all">Показать все</string>
+    <string name="description_title">Описание</string>
+    <string name="game">Игра</string>
+    <string name="place">Место</string>
+    <string name="time">Время</string>
+    <string name="members">Участники</string>
+    <string name="name_event">Название мероприятия</string>
+    <string name="max_count_members">Максимальное число участников</string>
+    <string name="save">Сохранить</string>
+    <string name="create">Создавать</string>
+    <string name="delete_title">Удалить</string>
+    <string name="min_1_max_100">Минимум 1, максимум 100</string>
 </resources>
