@@ -196,5 +196,19 @@
             tools:itemCount="2"
             tools:listitem="@layout/card_member" />
 
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rec_rounds"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="20dp"
+            android:layout_marginTop="10dp"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:layout_constrainedHeight="true"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/rec_members"
+            tools:itemCount="2"
+            tools:listitem="@layout/card_round" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

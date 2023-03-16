@@ -17,9 +17,12 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
 import studio.stilip.geek.R
 import studio.stilip.geek.app.HostViewModel
+import studio.stilip.geek.app.events.event.round.RoundAdapter
 import studio.stilip.geek.databinding.FragmentEventBinding
 
 @AndroidEntryPoint
@@ -69,12 +72,32 @@ class EventFragment : Fragment(R.layout.fragment_event) {
         }
         var countMembers = 0
 
+        val roundAdapter = RoundAdapter { round, score ->
+            viewModel.onMemberChanged(round.id, score.id, score.memberId)
+        }
+
         with(binding) {
             recMembers.adapter = adapter
+            recRounds.adapter = roundAdapter
 
             btnUnsub.setOnClickListener {
                 viewModel.onUnsubscribeClick()
             }
+        }
+
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewModel.rounds
+                .combine(viewModel.members) { rounds, members ->
+                    rounds to members
+                }
+                .flowWithLifecycle(viewLifecycleOwner.lifecycle)
+                .collectLatest { (rounds, members) ->
+                    roundAdapter.submitList(rounds.map { r ->
+                        r.copy(scores = r.scores.map { s ->
+                            s.copy(members = members)
+                        })
+                    })
+                }
         }
 
         viewLifecycleOwner.lifecycleScope.launch {

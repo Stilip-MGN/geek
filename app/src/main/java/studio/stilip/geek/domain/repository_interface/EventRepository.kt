@@ -2,6 +2,7 @@ package studio.stilip.geek.domain.repository_interface
 
 import kotlinx.coroutines.flow.Flow
 import studio.stilip.geek.domain.entities.Event
+import studio.stilip.geek.domain.entities.Round
 
 interface EventRepository {
 
@@ -20,4 +21,13 @@ interface EventRepository {
     suspend fun subscribeToEvent(userId: String, eventId: String)
 
     suspend fun unsubscribeFromEvent(userId: String, eventId: String)
+
+    suspend fun replaceMemberInScore(
+        eventId: String,
+        roundId: String,
+        scoreId: String,
+        userId: String
+    )
+
+    fun getRoundsByEventId(eventId: String): Flow<List<Round>>
 }

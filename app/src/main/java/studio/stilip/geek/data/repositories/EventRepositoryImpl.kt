@@ -11,6 +11,8 @@ import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import studio.stilip.geek.domain.entities.Event
+import studio.stilip.geek.domain.entities.Round
+import studio.stilip.geek.domain.entities.Score
 import studio.stilip.geek.domain.entities.User
 import studio.stilip.geek.domain.repository_interface.EventRepository
 import javax.inject.Inject
@@ -114,4 +116,49 @@ class EventRepositoryImpl @Inject constructor(
             .removeValue()
             .await()
     }
+
+    override suspend fun replaceMemberInScore(
+        eventId: String,
+        roundId: String,
+        scoreId: String,
+        userId: String
+    ) {
+        database
+            .child("Events")
+            .child(eventId)
+            .child("Rounds")
+            .child(roundId)
+            .child("Scores")
+            .child(scoreId).updateChildren(
+                mapOf("memberId" to userId)
+            ).await()
+    }
+
+    override fun getRoundsByEventId(eventId: String): Flow<List<Round>> =
+        callbackFlow {
+            val rounds = database.child("Events").child(eventId).child("Rounds")
+            val listener = rounds.addValueEventListener(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    launch {
+                        send(snapshot.children.mapNotNull {
+                            val r = it.getValue(Round::class.java)
+
+                            val s = snapshot.child(r!!.id)
+                                .child("Scores").children.mapNotNull { ds ->
+                                    ds.getValue(Score::class.java)
+                                }
+                            r.copy(scores = s)
+                        })
+                    }
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+                    cancel("Unable take rounds", error.toException())
+                }
+
+            })
+
+
+            awaitClose { rounds.removeEventListener(listener) }
+        }
 }
