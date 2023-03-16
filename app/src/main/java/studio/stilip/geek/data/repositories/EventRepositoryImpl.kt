@@ -55,12 +55,12 @@ class EventRepositoryImpl @Inject constructor(
         awaitClose { event.removeEventListener(listener) }
     }
 
-    override fun getMembersByEventId(id: String): Flow<List<User>> = callbackFlow {
+    override fun getMembersByEventId(id: String): Flow<List<String>> = callbackFlow {
         val members = database.child("Events").child(id).child("Members")
         val listener = members.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 launch {
-                    send(snapshot.children.mapNotNull { it.getValue(User::class.java) })
+                    send(snapshot.children.mapNotNull { it.getValue(User::class.java)!!.id })
                 }
             }
 
@@ -93,5 +93,25 @@ class EventRepositoryImpl @Inject constructor(
 
     override suspend fun deleteEvent(id: String) {
         database.child("Events").child(id).removeValue()
+    }
+
+    override suspend fun subscribeToEvent(userId: String, eventId: String) {
+        database
+            .child("Events")
+            .child(eventId)
+            .child("Members")
+            .child(userId).updateChildren(
+                mapOf("id" to userId)
+            ).await()
+    }
+
+    override suspend fun unsubscribeFromEvent(userId: String, eventId: String) {
+        database
+            .child("Events")
+            .child(eventId)
+            .child("Members")
+            .child(userId)
+            .removeValue()
+            .await()
     }
 }
