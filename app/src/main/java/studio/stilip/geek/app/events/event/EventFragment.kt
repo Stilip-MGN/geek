@@ -67,9 +67,14 @@ class EventFragment : Fragment(R.layout.fragment_event) {
         val adapter = MemberAdapter {
             //TODO Страница пользователей
         }
+        var countMembers = 0
 
         with(binding) {
             recMembers.adapter = adapter
+
+            btnUnsub.setOnClickListener {
+                viewModel.onUnsubscribeClick()
+            }
         }
 
         viewLifecycleOwner.lifecycleScope.launch {
@@ -81,7 +86,8 @@ class EventFragment : Fragment(R.layout.fragment_event) {
                         place.text = event.place
                         description.text = event.description
                         date.text = event.date
-                        membersCount.text = "/${event.maxMembers}"
+                        countMembers = event.maxMembers
+                        membersCount.text = "0/${countMembers}"
                     }
                 }
         }
@@ -92,7 +98,15 @@ class EventFragment : Fragment(R.layout.fragment_event) {
                 .collect { members ->
                     adapter.submitList(members)
                     with(binding) {
-                        membersCount.text = "${members.count()}${membersCount.text}"
+                        membersCount.text = "${members.count()}/${countMembers}"
+
+                        if (members.firstOrNull { member -> member.id == viewModel.userId } != null) {
+                            btnSub.visibility = View.GONE
+                            btnUnsub.visibility = View.VISIBLE
+                        } else {
+                            btnUnsub.visibility = View.GONE
+                            btnSub.visibility = View.VISIBLE
+                        }
                     }
                 }
         }
@@ -108,6 +122,18 @@ class EventFragment : Fragment(R.layout.fragment_event) {
                             .load(game.logo)
                             .centerCrop()
                             .into(gameLogo)
+                    }
+                }
+        }
+
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewModel.user
+                .flowWithLifecycle(viewLifecycleOwner.lifecycle)
+                .collect {
+                    with(binding) {
+                        btnSub.setOnClickListener {
+                            viewModel.onSubscribeClick()
+                        }
                     }
                 }
         }

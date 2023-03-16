@@ -38,4 +38,6 @@
     <string name="create">Создавать</string>
     <string name="delete_title">Удалить</string>
     <string name="min_1_max_100">Минимум 1, максимум 100</string>
+    <string name="participate">Участвовать</string>
+    <string name="cancel_participation">Отменить участие</string>
 </resources>

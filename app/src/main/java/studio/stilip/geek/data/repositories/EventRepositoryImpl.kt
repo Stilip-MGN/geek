@@ -94,4 +94,28 @@ class EventRepositoryImpl @Inject constructor(
     override suspend fun deleteEvent(id: String) {
         database.child("Events").child(id).removeValue()
     }
+
+    override suspend fun subscribeToEvent(user: User, eventId: String) {
+        database
+            .child("Events")
+            .child(eventId)
+            .child("Members")
+            .child(user.id).updateChildren(
+                mapOf(
+                    "id" to user.id,
+                    "name" to user.name,
+                    "avatar" to user.avatar,
+                )
+            ).await()
+    }
+
+    override suspend fun unsubscribeFromEvent(userId: String, eventId: String) {
+        database
+            .child("Events")
+            .child(eventId)
+            .child("Members")
+            .child(userId)
+            .removeValue()
+            .await()
+    }
 }

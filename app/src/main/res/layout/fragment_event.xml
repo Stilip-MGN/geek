@@ -128,6 +128,36 @@
             app:layout_constraintTop_toBottomOf="@id/date_title"
             tools:text="@tools:sample/date/hhmm" />
 
+
+        <Button
+            android:id="@+id/btn_sub"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="15dp"
+            android:backgroundTint="#4CAF50"
+            android:text="@string/participate"
+            app:layout_constraintEnd_toStartOf="@id/btn_unsub"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/date" />
+
+        <Button
+            android:id="@+id/btn_unsub"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="15dp"
+            android:backgroundTint="#F44336"
+            android:text="@string/cancel_participation"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/btn_sub"
+            app:layout_constraintTop_toBottomOf="@id/date" />
+
+        <androidx.constraintlayout.widget.Barrier
+            android:id="@+id/barrier"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:barrierDirection="bottom"
+            app:constraint_referenced_ids="btn_unsub,btn_sub" />
+
         <TextView
             android:id="@+id/members_title"
             android:layout_width="0dp"
@@ -138,7 +168,7 @@
             android:textAppearance="?textAppearanceHeadline6"
             app:layout_constraintEnd_toStartOf="@id/members_count"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/date" />
+            app:layout_constraintTop_toBottomOf="@id/barrier" />
 
         <TextView
             android:id="@+id/members_count"

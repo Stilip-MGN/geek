@@ -80,6 +80,9 @@ class EventCreateViewModel @Inject constructor(
         if (_eventName.value.isEmpty()) return
         viewModelScope.launch {
             val maxMembers = _maxMembers.value
+            val countMembers = if (maxMembers.isEmpty()) 1 else {
+                if (maxMembers.toInt() < 100) maxMembers.toInt() else 100
+            }
 
             createEvent(
                 Event(
@@ -89,7 +92,7 @@ class EventCreateViewModel @Inject constructor(
                     place = _place.value,
                     date = _date.value,
                     description = _description.value,
-                    maxMembers = if (maxMembers.isEmpty()) 1 else maxMembers.toInt()
+                    maxMembers = countMembers
                 )
             )
             eventCreated.value = true
