@@ -29,33 +29,29 @@ class EventViewModel @Inject constructor(
     private val unsubscribeFromEvent: UnsubscribeFromEventUseCase,
     stateHandle: SavedStateHandle
 ) : ViewModel() {
+    private val _membersId = getMembersByEventId(stateHandle[EVENT_ID]!!)
+        .stateIn(viewModelScope, SharingStarted.Eagerly, emptyList())
 
-    private val _game = MutableStateFlow(Game())
     val userId = UserCacheManager.getUserId()
     val eventId: String = stateHandle[EVENT_ID]!!
 
-    val game: StateFlow<Game> = _game
     val event = getEvent(eventId)
         .stateIn(viewModelScope, SharingStarted.Eagerly, Event())
-    val members = getMembersByEventId(stateHandle[EVENT_ID]!!)
-        .stateIn(viewModelScope, SharingStarted.Eagerly, emptyList())
+
+    val game = event.flatMapLatest { ev ->
+        getGameById(ev.gameId)
+    }.stateIn(viewModelScope, SharingStarted.Eagerly, Game())
+
     val user = getUserById(userId)
         .stateIn(viewModelScope, SharingStarted.Eagerly, User())
 
-    init {
-
-        viewModelScope.launch {
-            event.collectLatest { ev ->
-                getGameById(ev.gameId).collect { g ->
-                    _game.value = g
-                }
-            }
-        }
-    }
+    val members = _membersId.flatMapLatest { ids ->
+        flow { emit(ids.map { id -> getUserById(id).first() }) }
+    }.stateIn(viewModelScope, SharingStarted.Eagerly, emptyList())
 
     fun onSubscribeClick() {
         viewModelScope.launch {
-            subscribeToEvent(user.value, eventId)
+            subscribeToEvent(userId, eventId)
         }
     }
 

@@ -2,7 +2,6 @@ package studio.stilip.geek.domain.repository_interface
 
 import kotlinx.coroutines.flow.Flow
 import studio.stilip.geek.domain.entities.Event
-import studio.stilip.geek.domain.entities.User
 
 interface EventRepository {
 
@@ -10,7 +9,7 @@ interface EventRepository {
 
     fun getEventById(id: String): Flow<Event>
 
-    fun getMembersByEventId(id: String): Flow<List<User>>
+    fun getMembersByEventId(id: String): Flow<List<String>>
 
     suspend fun updateEvent(event: Event)
 
@@ -18,7 +17,7 @@ interface EventRepository {
 
     suspend fun deleteEvent(id: String)
 
-    suspend fun subscribeToEvent(user: User, eventId: String)
+    suspend fun subscribeToEvent(userId: String, eventId: String)
 
     suspend fun unsubscribeFromEvent(userId: String, eventId: String)
 }

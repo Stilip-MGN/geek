@@ -15,6 +15,7 @@ import studio.stilip.geek.domain.usecase.event.GetEventByIdUseCase
 import studio.stilip.geek.domain.usecase.event.GetMembersByEventIdUseCase
 import studio.stilip.geek.domain.usecase.event.UpdateEventUseCase
 import studio.stilip.geek.domain.usecase.game.GetAllGamesUserUseCase
+import studio.stilip.geek.domain.usecase.user.GetUserByIdUseCase
 import javax.inject.Inject
 
 @HiltViewModel
@@ -22,6 +23,7 @@ class EventEditViewModel @Inject constructor(
     private val getEvent: GetEventByIdUseCase,
     private val getMembersByEventId: GetMembersByEventIdUseCase,
     private val getAllGames: GetAllGamesUserUseCase,
+    private val getUserById: GetUserByIdUseCase,
     private val updateEvent: UpdateEventUseCase,
     private val deleteEvent: DeleteEventUseCase,
     stateHandle: SavedStateHandle
@@ -37,10 +39,17 @@ class EventEditViewModel @Inject constructor(
     val eventUpdated = MutableStateFlow<Boolean?>(null)
     val eventId: String = stateHandle[EVENT_ID]!!
     val eventNameHelper = MutableStateFlow(R.string.error_input_empty)
+
     val event = getEvent(eventId)
         .stateIn(viewModelScope, SharingStarted.Eagerly, Event())
-    val members = getMembersByEventId(eventId)
+
+    private val _membersId = getMembersByEventId(eventId)
         .stateIn(viewModelScope, SharingStarted.Eagerly, emptyList())
+
+    val members = _membersId.flatMapLatest { ids ->
+        flow { emit(ids.map { id -> getUserById(id).first() }) }
+    }.stateIn(viewModelScope, SharingStarted.Eagerly, emptyList())
+
     val games = getAllGames()
         .stateIn(viewModelScope, SharingStarted.Eagerly, emptyList())
 
