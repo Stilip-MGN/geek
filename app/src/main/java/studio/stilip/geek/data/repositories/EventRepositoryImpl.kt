@@ -178,4 +178,15 @@ class EventRepositoryImpl @Inject constructor(
 
             awaitClose { rounds.removeEventListener(listener) }
         }
+
+    override suspend fun createScoreByRoundId(eventId: String, roundId: String) {
+        val ref = database
+            .child("Events")
+            .child(eventId)
+            .child("Rounds")
+            .child(roundId)
+            .child("Scores")
+            .push()
+        ref.setValue(Score(id = ref.key!!))
+    }
 }

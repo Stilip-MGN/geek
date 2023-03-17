@@ -24,6 +24,7 @@ import studio.stilip.geek.R
 import studio.stilip.geek.app.HostViewModel
 import studio.stilip.geek.app.events.event.round.RoundAdapter
 import studio.stilip.geek.databinding.FragmentEventBinding
+import kotlin.math.round
 
 @AndroidEntryPoint
 class EventFragment : Fragment(R.layout.fragment_event) {
@@ -76,6 +77,8 @@ class EventFragment : Fragment(R.layout.fragment_event) {
             viewModel.onMemberChanged(round.id, score.id, score.memberId)
         }, { round, score ->
             viewModel.onScoreChanged(round.id, score.id, score.score)
+        }, { round ->
+            viewModel.onAddMemberClicked(round.id)
         })
 
         with(binding) {

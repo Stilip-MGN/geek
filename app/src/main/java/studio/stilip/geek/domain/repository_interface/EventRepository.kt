@@ -37,4 +37,6 @@ interface EventRepository {
     )
 
     fun getRoundsByEventId(eventId: String): Flow<List<Round>>
+
+    suspend fun createScoreByRoundId(eventId: String, roundId: String)
 }

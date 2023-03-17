@@ -10,6 +10,7 @@ class RoundViewHolder(
     private val binding: CardRoundBinding,
     private val onMemberChanged: (Round, Score) -> Unit,
     private val onScoreChanged: (Round, Score) -> Unit,
+    private val onAddMemberClicked: (Round) -> Unit,
 ) : RecyclerView.ViewHolder(binding.root) {
 
     private lateinit var round: Round
@@ -26,6 +27,9 @@ class RoundViewHolder(
         adapter.submitList(round.scores)
         with(binding) {
             recScore.adapter = adapter
+            btnAddPlayer.setOnClickListener {
+                onAddMemberClicked(round)
+            }
         }
 
     }

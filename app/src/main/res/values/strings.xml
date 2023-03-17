@@ -44,4 +44,5 @@
     <string name="score">Счёт</string>
     <string name="add_player">Добавить игрока</string>
     <string name="select_player">Выберите игрока</string>
+    <string name="add_round">Добавить партию</string>
 </resources>

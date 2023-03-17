@@ -26,7 +26,7 @@ class MemberScoreViewHolder(
         spinnerPlayer.adapter = adapterPlayer
         adapterPlayer.addAll(scoreItem.members)
 
-        if (scoreItem.members.isNotEmpty()) {
+        if (scoreItem.members.isNotEmpty() && scoreItem.memberId.isNotEmpty()) {
             val member = scoreItem.members.first { m -> m.id == scoreItem.memberId }
             with(binding) {
                 spinnerPlayer.setSelection(scoreItem.members.lastIndexOf(member))
