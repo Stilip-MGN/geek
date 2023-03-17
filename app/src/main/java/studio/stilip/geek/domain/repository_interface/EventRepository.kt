@@ -29,5 +29,12 @@ interface EventRepository {
         userId: String
     )
 
+    suspend fun replaceScoreInScore(
+        eventId: String,
+        roundId: String,
+        scoreId: String,
+        score: Int
+    )
+
     fun getRoundsByEventId(eventId: String): Flow<List<Round>>
 }

@@ -72,9 +72,11 @@ class EventFragment : Fragment(R.layout.fragment_event) {
         }
         var countMembers = 0
 
-        val roundAdapter = RoundAdapter { round, score ->
+        val roundAdapter = RoundAdapter({ round, score ->
             viewModel.onMemberChanged(round.id, score.id, score.memberId)
-        }
+        }, { round, score ->
+            viewModel.onScoreChanged(round.id, score.id, score.score)
+        })
 
         with(binding) {
             recMembers.adapter = adapter

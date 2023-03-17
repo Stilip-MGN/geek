@@ -9,6 +9,7 @@ import studio.stilip.geek.domain.entities.Score
 class RoundViewHolder(
     private val binding: CardRoundBinding,
     private val onMemberChanged: (Round, Score) -> Unit,
+    private val onScoreChanged: (Round, Score) -> Unit,
 ) : RecyclerView.ViewHolder(binding.root) {
 
     private lateinit var round: Round
@@ -17,9 +18,11 @@ class RoundViewHolder(
         round = item
 
         title.text = round.title
-        val adapter = MemberScoreAdapter { score ->
+        val adapter = MemberScoreAdapter({ score ->
             onMemberChanged(round, score)
-        }
+        }, { score ->
+            onScoreChanged(round, score)
+        })
         adapter.submitList(round.scores)
         with(binding) {
             recScore.adapter = adapter

@@ -134,6 +134,23 @@ class EventRepositoryImpl @Inject constructor(
             ).await()
     }
 
+    override suspend fun replaceScoreInScore(
+        eventId: String,
+        roundId: String,
+        scoreId: String,
+        score: Int
+    ) {
+        database
+            .child("Events")
+            .child(eventId)
+            .child("Rounds")
+            .child(roundId)
+            .child("Scores")
+            .child(scoreId).updateChildren(
+                mapOf("score" to score)
+            ).await()
+    }
+
     override fun getRoundsByEventId(eventId: String): Flow<List<Round>> =
         callbackFlow {
             val rounds = database.child("Events").child(eventId).child("Rounds")

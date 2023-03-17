@@ -8,13 +8,15 @@ import studio.stilip.geek.domain.entities.Score
 
 class MemberScoreAdapter(
     private val onMemberChanged: (Score) -> Unit,
+    private val onScoreChanged: (Score) -> Unit,
 ) : ListAdapter<Score, MemberScoreViewHolder>(ScoreDiffCallback) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
         MemberScoreViewHolder(
             parent.context,
             CardMemberScoreBinding.inflate(LayoutInflater.from(parent.context), parent, false),
-            onMemberChanged
+            onMemberChanged,
+            onScoreChanged
         )
 
     override fun onBindViewHolder(holder: MemberScoreViewHolder, position: Int) =

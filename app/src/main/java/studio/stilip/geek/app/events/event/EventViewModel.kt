@@ -23,6 +23,7 @@ class EventViewModel @Inject constructor(
     private val subscribeToEvent: SubscribeToEventUseCase,
     private val unsubscribeFromEvent: UnsubscribeFromEventUseCase,
     private val replaceMemberInScore: ReplaceMemberInScoreUseCase,
+    private val replaceScoreInScore: ReplaceScoreInScoreUseCase,
     private val getRoundsByEventId: GetRoundsByEventIdUseCase,
     stateHandle: SavedStateHandle
 ) : ViewModel() {
@@ -64,6 +65,12 @@ class EventViewModel @Inject constructor(
     fun onMemberChanged(roundId: String, scoreId: String, memberId: String) {
         viewModelScope.launch {
             replaceMemberInScore(eventId, roundId, scoreId, memberId)
+        }
+    }
+
+    fun onScoreChanged(roundId: String, scoreId: String, score: Int) {
+        viewModelScope.launch {
+            replaceScoreInScore(eventId, roundId, scoreId, score)
         }
     }
 
