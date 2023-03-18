@@ -24,7 +24,6 @@ import studio.stilip.geek.R
 import studio.stilip.geek.app.HostViewModel
 import studio.stilip.geek.app.events.event.round.RoundAdapter
 import studio.stilip.geek.databinding.FragmentEventBinding
-import kotlin.math.round
 
 @AndroidEntryPoint
 class EventFragment : Fragment(R.layout.fragment_event) {
@@ -87,6 +86,11 @@ class EventFragment : Fragment(R.layout.fragment_event) {
 
             btnUnsub.setOnClickListener {
                 viewModel.onUnsubscribeClick()
+            }
+            btnAddRound.setOnClickListener {
+                RoundDialog { title ->
+                    viewModel.onAddRoundClicked(title)
+                }.show(parentFragmentManager, "dialog")
             }
         }
 
