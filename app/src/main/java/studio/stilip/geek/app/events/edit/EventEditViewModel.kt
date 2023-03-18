@@ -5,11 +5,13 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.job
 import kotlinx.coroutines.launch
 import studio.stilip.geek.R
 import studio.stilip.geek.app.events.event.EventFragment.Companion.EVENT_ID
 import studio.stilip.geek.domain.entities.Event
 import studio.stilip.geek.domain.entities.Game
+import studio.stilip.geek.domain.entities.User
 import studio.stilip.geek.domain.usecase.event.DeleteEventUseCase
 import studio.stilip.geek.domain.usecase.event.GetEventByIdUseCase
 import studio.stilip.geek.domain.usecase.event.GetMembersByEventIdUseCase
@@ -46,9 +48,15 @@ class EventEditViewModel @Inject constructor(
     private val _membersId = getMembersByEventId(eventId)
         .stateIn(viewModelScope, SharingStarted.Eagerly, emptyList())
 
-    val members = _membersId.flatMapLatest { ids ->
-        flow { emit(ids.map { id -> getUserById(id).first() }) }
-    }.stateIn(viewModelScope, SharingStarted.Eagerly, emptyList())
+    private val _membersForDelete: MutableStateFlow<List<String>> =
+        MutableStateFlow(arrayListOf())
+
+    val members: StateFlow<List<User>> = _membersId
+        .combine(_membersForDelete) { allIds, delIds ->
+            allIds
+                .filterNot { id -> delIds.contains(id) }
+                .map { id -> getUserById(id).first() }
+        }.stateIn(viewModelScope, SharingStarted.Eagerly, emptyList())
 
     val games = getAllGames()
         .stateIn(viewModelScope, SharingStarted.Eagerly, emptyList())
@@ -114,7 +122,8 @@ class EventEditViewModel @Inject constructor(
                     date = _date.value,
                     description = _description.value,
                     maxMembers = if (maxMembers.isEmpty()) 1 else maxMembers.toInt()
-                )
+                ),
+                _membersForDelete.value
             )
             eventUpdated.value = true
         }
@@ -123,6 +132,12 @@ class EventEditViewModel @Inject constructor(
     fun delete() {
         viewModelScope.launch {
             deleteEvent(eventId)
+        }
+    }
+
+    fun onDeleteMemberClicked(id: String) {
+        viewModelScope.launch {
+            _membersForDelete.value = _membersForDelete.value.plus(id)
         }
     }
 }
