@@ -40,4 +40,13 @@
     <string name="min_1_max_100">Минимум 1, максимум 100</string>
     <string name="participate">Участвовать</string>
     <string name="cancel_participation">Отменить участие</string>
+    <string name="member">Участник</string>
+    <string name="score">Счёт</string>
+    <string name="add_player">Добавить игрока</string>
+    <string name="select_player">Выберите игрока</string>
+    <string name="add_round">Добавить партию</string>
+    <string name="create_round">Создание партии</string>
+    <string name="write_title_round">Введите название партии</string>
+    <string name="cancel">Закрыть</string>
+    <string name="btn_create">Создать</string>
 </resources>

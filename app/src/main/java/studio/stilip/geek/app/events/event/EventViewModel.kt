@@ -8,13 +8,8 @@ import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import studio.stilip.geek.app.events.event.EventFragment.Companion.EVENT_ID
 import studio.stilip.geek.data.UserCacheManager
-import studio.stilip.geek.domain.entities.Event
-import studio.stilip.geek.domain.entities.Game
-import studio.stilip.geek.domain.entities.User
-import studio.stilip.geek.domain.usecase.event.GetEventByIdUseCase
-import studio.stilip.geek.domain.usecase.event.GetMembersByEventIdUseCase
-import studio.stilip.geek.domain.usecase.event.SubscribeToEventUseCase
-import studio.stilip.geek.domain.usecase.event.UnsubscribeFromEventUseCase
+import studio.stilip.geek.domain.entities.*
+import studio.stilip.geek.domain.usecase.event.*
 import studio.stilip.geek.domain.usecase.game.GetGameByIdUseCase
 import studio.stilip.geek.domain.usecase.user.GetUserByIdUseCase
 import javax.inject.Inject
@@ -27,6 +22,11 @@ class EventViewModel @Inject constructor(
     private val getUserById: GetUserByIdUseCase,
     private val subscribeToEvent: SubscribeToEventUseCase,
     private val unsubscribeFromEvent: UnsubscribeFromEventUseCase,
+    private val replaceMemberInScore: ReplaceMemberInScoreUseCase,
+    private val replaceScoreInScore: ReplaceScoreInScoreUseCase,
+    private val getRoundsByEventId: GetRoundsByEventIdUseCase,
+    private val addMemberInRound: AddMemberInRoundUseCase,
+    private val createRound: CreateRoundUseCase,
     stateHandle: SavedStateHandle
 ) : ViewModel() {
     private val _membersId = getMembersByEventId(stateHandle[EVENT_ID]!!)
@@ -49,6 +49,9 @@ class EventViewModel @Inject constructor(
         flow { emit(ids.map { id -> getUserById(id).first() }) }
     }.stateIn(viewModelScope, SharingStarted.Eagerly, emptyList())
 
+    val rounds = getRoundsByEventId(eventId)
+        .stateIn(viewModelScope, SharingStarted.Eagerly, emptyList())
+
     fun onSubscribeClick() {
         viewModelScope.launch {
             subscribeToEvent(userId, eventId)
@@ -58,6 +61,30 @@ class EventViewModel @Inject constructor(
     fun onUnsubscribeClick() {
         viewModelScope.launch {
             unsubscribeFromEvent(userId, eventId)
+        }
+    }
+
+    fun onMemberChanged(roundId: String, scoreId: String, memberId: String) {
+        viewModelScope.launch {
+            replaceMemberInScore(eventId, roundId, scoreId, memberId)
+        }
+    }
+
+    fun onScoreChanged(roundId: String, scoreId: String, score: Int) {
+        viewModelScope.launch {
+            replaceScoreInScore(eventId, roundId, scoreId, score)
+        }
+    }
+
+    fun onAddMemberClicked(roundId: String) {
+        viewModelScope.launch {
+            addMemberInRound(eventId, roundId)
+        }
+    }
+
+    fun onAddRoundClicked(title: String) {
+        viewModelScope.launch {
+            createRound(eventId, title)
         }
     }
 
