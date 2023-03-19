@@ -47,6 +47,9 @@
         <action
             android:id="@+id/action_navigation_events_to_event_create"
             app:destination="@id/navigation_event_create" />
+        <action
+            android:id="@+id/action_navigation_events_to_event_visitor"
+            app:destination="@id/navigation_event_visitor" />
     </fragment>
 
     <fragment
@@ -128,7 +131,7 @@
             android:id="@+id/action_navigation_event_edit_to_events"
             app:destination="@id/navigation_events"
             app:popUpTo="@id/navigation_events"
-            app:popUpToInclusive="true"/>
+            app:popUpToInclusive="true" />
     </fragment>
 
     <fragment
@@ -141,5 +144,10 @@
             app:popUpTo="@id/navigation_events"
             app:popUpToInclusive="true" />
     </fragment>
+
+    <fragment
+        android:id="@+id/navigation_event_visitor"
+        android:name="studio.stilip.geek.app.events.event_visitor.EventVisitorFragment"
+        tools:layout="@layout/fragment_event_visitor" />
 
 </navigation>

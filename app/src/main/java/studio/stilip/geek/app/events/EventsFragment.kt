@@ -30,14 +30,20 @@ class EventsFragment : Fragment(R.layout.fragment_events) {
         hostViewModel.setToolbarTitle(getText(R.string.title_events).toString())
         hostViewModel.setToolbarBackBtnVisible(false)
 
-        val adapter = EventAdapter { id ->
+        val adapter = EventAdapter { event ->
             val arg = Bundle().apply {
-                putString(EVENT_ID, id)
+                putString(EVENT_ID, event.id)
             }
-            findNavController().navigate(
-                R.id.action_navigation_events_to_event,
-                arg
-            )
+            if (event.ownId == viewModel.userId)
+                findNavController().navigate(
+                    R.id.action_navigation_events_to_event,
+                    arg
+                )
+            else
+                findNavController().navigate(
+                    R.id.action_navigation_events_to_event_visitor,
+                    arg
+                )
         }
 
         with(binding) {
