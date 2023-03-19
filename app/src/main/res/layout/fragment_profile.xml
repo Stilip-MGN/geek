@@ -78,7 +78,7 @@
             android:text="@string/show_all"
             android:textAlignment="center"
             android:textAppearance="?textAppearanceBody2"
-            android:textColor="?colorPrimaryVariant"
+            android:textColor="?colorSecondaryVariant"
             app:layout_constraintBaseline_toBaselineOf="@id/my_games_title"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="1"
@@ -122,7 +122,7 @@
             android:text="@string/show_all"
             android:textAlignment="center"
             android:textAppearance="?textAppearanceBody2"
-            android:textColor="?colorPrimaryVariant"
+            android:textColor="?colorSecondaryVariant"
             app:layout_constraintBaseline_toBaselineOf="@id/wishlist_title"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/wishlist_title" />
