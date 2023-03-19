@@ -102,6 +102,20 @@ class EventFragment : Fragment(R.layout.fragment_event) {
                 .flowWithLifecycle(viewLifecycleOwner.lifecycle)
                 .collectLatest { (rounds, members) ->
                     roundAdapter.submitList(rounds.map { r ->
+                        with(binding) {
+                            if (rounds.isNotEmpty()) {
+                                btnSub.visibility = View.GONE
+                                btnUnsub.visibility = View.GONE
+                            } else {
+                                if (members.firstOrNull { member -> member.id == viewModel.userId } != null) {
+                                    btnSub.visibility = View.GONE
+                                    btnUnsub.visibility = View.VISIBLE
+                                } else {
+                                    btnUnsub.visibility = View.GONE
+                                    btnSub.visibility = View.VISIBLE
+                                }
+                            }
+                        }
                         r.copy(scores = r.scores.map { s ->
                             s.copy(members = members)
                         })

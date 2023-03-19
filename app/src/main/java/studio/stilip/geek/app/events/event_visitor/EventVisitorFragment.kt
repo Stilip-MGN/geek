@@ -56,6 +56,22 @@ class EventVisitorFragment : Fragment(R.layout.fragment_event_visitor) {
                 }
                 .flowWithLifecycle(viewLifecycleOwner.lifecycle)
                 .collectLatest { (rounds, members) ->
+                    with(binding) {
+                        if (rounds.isNotEmpty()) {
+                            roundTitle.visibility = View.VISIBLE
+                            btnSub.visibility = View.GONE
+                            btnUnsub.visibility = View.GONE
+                        } else {
+                            roundTitle.visibility = View.GONE
+                            if (members.firstOrNull { member -> member.id == viewModel.userId } != null) {
+                                btnSub.visibility = View.GONE
+                                btnUnsub.visibility = View.VISIBLE
+                            } else {
+                                btnUnsub.visibility = View.GONE
+                                btnSub.visibility = View.VISIBLE
+                            }
+                        }
+                    }
                     roundAdapter.submitList(rounds.map { r ->
                         r.copy(scores = r.scores.map { s ->
                             s.copy(members = members)
