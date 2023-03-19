@@ -6,6 +6,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import studio.stilip.geek.R
+import studio.stilip.geek.data.UserCacheManager
 import studio.stilip.geek.domain.entities.Event
 import studio.stilip.geek.domain.entities.Game
 import studio.stilip.geek.domain.usecase.event.CreateEventUseCase
@@ -18,6 +19,7 @@ class EventCreateViewModel @Inject constructor(
     private val createEvent: CreateEventUseCase
 ) : ViewModel() {
 
+    private val userId = UserCacheManager.getUserId()
     private val _eventName = MutableStateFlow("")
     private val _game = MutableStateFlow(Game())
     private val _place = MutableStateFlow("")
@@ -92,7 +94,8 @@ class EventCreateViewModel @Inject constructor(
                     place = _place.value,
                     date = _date.value,
                     description = _description.value,
-                    maxMembers = countMembers
+                    maxMembers = countMembers,
+                    ownId = userId,
                 )
             )
             eventCreated.value = true

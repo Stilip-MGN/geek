@@ -6,14 +6,14 @@ import studio.stilip.geek.domain.entities.Event
 
 class EventViewHolder(
     private val binding: CardEventBinding,
-    private val onItemClicked: (String) -> Unit,
+    private val onItemClicked: (Event) -> Unit,
 ) : RecyclerView.ViewHolder(binding.root) {
 
     private lateinit var event: Event
 
     init {
         itemView.setOnClickListener {
-            onItemClicked(event.id)
+            onItemClicked(event)
         }
     }
 
@@ -24,6 +24,5 @@ class EventViewHolder(
         gameName.text = event.gameName
         place.text = event.place
         date.text = event.date
-
     }
 }

@@ -9,4 +9,5 @@ data class Event(
     val date: String = "",
     val description: String = "",
     val maxMembers: Int = 0,
+    val ownId: String = "",
 )
