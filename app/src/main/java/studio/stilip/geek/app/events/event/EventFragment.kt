@@ -23,6 +23,7 @@ import kotlinx.coroutines.launch
 import studio.stilip.geek.R
 import studio.stilip.geek.app.HostViewModel
 import studio.stilip.geek.app.events.event.round.RoundAdapter
+import studio.stilip.geek.app.games.gameinfo.GameInfoFragment.Companion.GAME_ID
 import studio.stilip.geek.databinding.FragmentEventBinding
 
 @AndroidEntryPoint
@@ -170,6 +171,24 @@ class EventFragment : Fragment(R.layout.fragment_event) {
                             .load(game.logo)
                             .centerCrop()
                             .into(gameLogo)
+
+                        fun navigateToGameInformation() {
+                            val arg = Bundle().apply {
+                                putString(GAME_ID, game.id)
+                            }
+                            findNavController().navigate(
+                                R.id.action_navigation_event_to_game_info,
+                                arg
+                            )
+                        }
+
+                        gameName.setOnClickListener {
+                            navigateToGameInformation()
+                        }
+
+                        gameLogo.setOnClickListener {
+                            navigateToGameInformation()
+                        }
                     }
                 }
         }

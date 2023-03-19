@@ -7,6 +7,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
@@ -16,6 +17,7 @@ import studio.stilip.geek.R
 import studio.stilip.geek.app.HostViewModel
 import studio.stilip.geek.app.events.event.MemberAdapter
 import studio.stilip.geek.app.events.event_visitor.round.RoundVisitorAdapter
+import studio.stilip.geek.app.games.gameinfo.GameInfoFragment
 import studio.stilip.geek.databinding.FragmentEventVisitorBinding
 
 @AndroidEntryPoint
@@ -125,6 +127,24 @@ class EventVisitorFragment : Fragment(R.layout.fragment_event_visitor) {
                             .load(game.logo)
                             .centerCrop()
                             .into(gameLogo)
+
+                        fun navigateToGameInformation() {
+                            val arg = Bundle().apply {
+                                putString(GameInfoFragment.GAME_ID, game.id)
+                            }
+                            findNavController().navigate(
+                                R.id.action_navigation_event_visitor_to_game_info,
+                                arg
+                            )
+                        }
+
+                        gameName.setOnClickListener {
+                            navigateToGameInformation()
+                        }
+
+                        gameLogo.setOnClickListener {
+                            navigateToGameInformation()
+                        }
                     }
                 }
         }
