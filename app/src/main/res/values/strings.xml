@@ -48,5 +48,7 @@
     <string name="create_round">Создание партии</string>
     <string name="write_title_round">Введите название партии</string>
     <string name="cancel">Закрыть</string>
+    <string name="accept">Подтвердить</string>
     <string name="btn_create">Создать</string>
+    <string name="sure_want_to_delete">Вы действительно хотите удалить?</string>
 </resources>

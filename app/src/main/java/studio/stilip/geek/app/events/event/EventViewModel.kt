@@ -27,6 +27,7 @@ class EventViewModel @Inject constructor(
     private val getRoundsByEventId: GetRoundsByEventIdUseCase,
     private val addMemberInRound: AddMemberInRoundUseCase,
     private val createRound: CreateRoundUseCase,
+    private val deleteRound: DeleteRoundUseCase,
     stateHandle: SavedStateHandle
 ) : ViewModel() {
     private val _membersId = getMembersByEventId(stateHandle[EVENT_ID]!!)
@@ -85,6 +86,12 @@ class EventViewModel @Inject constructor(
     fun onAddRoundClicked(title: String) {
         viewModelScope.launch {
             createRound(eventId, title)
+        }
+    }
+
+    fun onDeleteClicked(roundId: String) {
+        viewModelScope.launch {
+            deleteRound(eventId, roundId)
         }
     }
 

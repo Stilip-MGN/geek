@@ -78,6 +78,8 @@ class EventFragment : Fragment(R.layout.fragment_event) {
             viewModel.onScoreChanged(round.id, score.id, score.score)
         }, { round ->
             viewModel.onAddMemberClicked(round.id)
+        }, { round ->
+            viewModel.onDeleteClicked(round.id)
         })
 
         with(binding) {

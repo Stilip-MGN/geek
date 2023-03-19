@@ -11,6 +11,7 @@ class RoundAdapter(
     private val onMemberChanged: (Round, Score) -> Unit,
     private val onScoreChanged: (Round, Score) -> Unit,
     private val onAddMemberClicked: (Round) -> Unit,
+    private val onDeleteClicked: (Round) -> Unit,
 ) : ListAdapter<Round, RoundViewHolder>(RoundDiffCallback) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
@@ -18,7 +19,8 @@ class RoundAdapter(
             CardRoundBinding.inflate(LayoutInflater.from(parent.context), parent, false),
             onMemberChanged,
             onScoreChanged,
-            onAddMemberClicked
+            onAddMemberClicked,
+            onDeleteClicked
         )
 
     override fun onBindViewHolder(holder: RoundViewHolder, position: Int) =

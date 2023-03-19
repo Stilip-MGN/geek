@@ -189,7 +189,7 @@ class EventRepositoryImpl @Inject constructor(
             .child(roundId)
             .child("Scores")
             .push()
-        ref.setValue(Score(id = ref.key!!))
+        ref.setValue(Score(id = ref.key!!)).await()
     }
 
     override suspend fun createRound(eventId: String, title: String) {
@@ -198,6 +198,16 @@ class EventRepositoryImpl @Inject constructor(
             .child(eventId)
             .child("Rounds")
             .push()
-        ref.setValue(Round(id = ref.key!!, title = title))
+        ref.setValue(Round(id = ref.key!!, title = title)).await()
+    }
+
+    override suspend fun deleteRound(eventId: String, roundId: String) {
+        database
+            .child("Events")
+            .child(eventId)
+            .child("Rounds")
+            .child(roundId)
+            .removeValue()
+            .await()
     }
 }
