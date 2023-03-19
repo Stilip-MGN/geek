@@ -116,6 +116,9 @@
         <action
             android:id="@+id/action_navigation_event_to_event_edit"
             app:destination="@id/navigation_event_edit" />
+        <action
+            android:id="@+id/action_navigation_event_to_game_info"
+            app:destination="@id/navigation_game_info" />
     </fragment>
 
     <fragment
@@ -148,6 +151,10 @@
     <fragment
         android:id="@+id/navigation_event_visitor"
         android:name="studio.stilip.geek.app.events.event_visitor.EventVisitorFragment"
-        tools:layout="@layout/fragment_event_visitor" />
+        tools:layout="@layout/fragment_event_visitor">
+        <action
+            android:id="@+id/action_navigation_event_visitor_to_game_info"
+            app:destination="@id/navigation_game_info" />
+    </fragment>
 
 </navigation>

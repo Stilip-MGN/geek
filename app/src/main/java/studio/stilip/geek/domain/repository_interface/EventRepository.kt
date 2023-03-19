@@ -41,4 +41,6 @@ interface EventRepository {
     suspend fun createScoreByRoundId(eventId: String, roundId: String)
 
     suspend fun createRound(eventId: String, title: String)
+
+    suspend fun deleteRound(eventId: String, roundId: String)
 }
