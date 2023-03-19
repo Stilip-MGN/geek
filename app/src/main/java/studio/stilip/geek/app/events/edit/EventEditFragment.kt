@@ -45,7 +45,6 @@ class EventEditFragment : Fragment(R.layout.fragment_event_edit) {
             override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
                 return when (menuItem.itemId) {
                     R.id.menu_done -> {
-                        //viewModel.update(collectNewEvent())
                         viewModel.onCompleteClicked()
                         true
                     }
@@ -71,7 +70,8 @@ class EventEditFragment : Fragment(R.layout.fragment_event_edit) {
         hostViewModel.setToolbarTitle(getText(R.string.title_event).toString())
         hostViewModel.setToolbarBackBtnVisible(true)
 
-        val adapter = MemberAdapter {
+        val adapter = MemberWithDeleteAdapter { id ->
+            viewModel.onDeleteMemberClicked(id)
             //TODO Страница пользователей
         }
 

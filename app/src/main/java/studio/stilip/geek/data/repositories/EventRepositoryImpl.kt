@@ -74,8 +74,9 @@ class EventRepositoryImpl @Inject constructor(
         awaitClose { members.removeEventListener(listener) }
     }
 
-    override suspend fun updateEvent(event: Event) {
-        database.child("Events").child(event.id).updateChildren(
+    override suspend fun updateEvent(event: Event, deleteMembersId: List<String>) {
+        val ref = database.child("Events").child(event.id)
+        ref.updateChildren(
             mapOf(
                 "eventName" to event.eventName,
                 "gameId" to event.gameId,
@@ -86,6 +87,9 @@ class EventRepositoryImpl @Inject constructor(
                 "place" to event.place,
             )
         ).await()
+        deleteMembersId.forEach { id ->
+            ref.child("Members").child(id).removeValue().await()
+        }
     }
 
     override suspend fun createEvent(event: Event) {

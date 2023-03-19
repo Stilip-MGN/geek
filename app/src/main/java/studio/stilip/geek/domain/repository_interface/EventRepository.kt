@@ -12,7 +12,7 @@ interface EventRepository {
 
     fun getMembersByEventId(id: String): Flow<List<String>>
 
-    suspend fun updateEvent(event: Event)
+    suspend fun updateEvent(event: Event, deleteMembersId: List<String>)
 
     suspend fun createEvent(event: Event)
 
