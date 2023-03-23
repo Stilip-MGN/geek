@@ -3,37 +3,25 @@ package studio.stilip.geek.app.profile.collection
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.stateIn
-import kotlinx.coroutines.launch
-import studio.stilip.geek.domain.entities.Game
-import studio.stilip.geek.domain.usecase.authorization.GetCurrentUserRefUseCase
+import kotlinx.coroutines.flow.*
+import studio.stilip.geek.data.UserCacheManager
+import studio.stilip.geek.domain.usecase.game.GetGameByIdUseCase
 import studio.stilip.geek.domain.usecase.user.GetUserCollectionByIdUseCase
 import javax.inject.Inject
 
 @HiltViewModel
 class CollectionViewModel @Inject constructor(
-    private val currentUser: GetCurrentUserRefUseCase,
     private val getCollectionById: GetUserCollectionByIdUseCase,
+    private val getGameById: GetGameByIdUseCase,
 ) : ViewModel() {
 
-    private val _collection = MutableStateFlow<List<Game>>(emptyList())
-    private val userRef = currentUser()
-        .stateIn(viewModelScope, SharingStarted.Eagerly, null)
+    private val userId = UserCacheManager.getUserId()
+    private val collectionGamesIds = getCollectionById(userId)
+        .stateIn(viewModelScope, SharingStarted.Eagerly, emptyList())
 
-    val collection: StateFlow<List<Game>> = _collection
-
-    init {
-        viewModelScope.launch {
-            userRef.collect {
-                it?.let {
-                    getCollectionById(it.uid).collect { g ->
-                        _collection.value = g
-                    }
-                }
-            }
+    val collection = collectionGamesIds.map { ids ->
+        ids.map { id ->
+            getGameById(id).first()
         }
-    }
+    }.stateIn(viewModelScope, SharingStarted.Eagerly, emptyList())
 }

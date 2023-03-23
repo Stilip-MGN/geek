@@ -19,15 +19,6 @@ class GameRepositoryImpl @Inject constructor(
     private val database: DatabaseReference
 ) : GameRepository {
 
-    val games1 = arrayListOf(
-        Game(name = "A", time = "30 min", countPlayers = "2-3", age = "10+"),
-        Game(
-            name = "B", time = "120 min", countPlayers = "1-3", age = "15+",
-            description = "Вышел в поле дед",
-            logo = "https://tesera.ru/images/items/1401961,3/200x200xpa/photo1.png"
-        ),
-    )
-
     override fun getAllGames(): Flow<List<Game>> = callbackFlow {
         val games = database.child("Games")
         val listener = games.addValueEventListener(object : ValueEventListener {
@@ -62,34 +53,34 @@ class GameRepositoryImpl @Inject constructor(
         awaitClose { games.removeEventListener(listener) }
     }
 
-    override fun getUserCollectionGamesById(id: String): Flow<List<Game>> = callbackFlow {
-        val games = database.child("Users").child(id).child("Collection")
-        val listener = games.addValueEventListener(object : ValueEventListener {
+    override fun getUserCollectionGamesById(id: String): Flow<List<String>> = callbackFlow {
+        val gamesId = database.child("Collection").child(id)
+        val listener = gamesId.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 launch {
-                    send(snapshot.children.mapNotNull { it.getValue(Game::class.java) })
+                    send(snapshot.children.mapNotNull { it.key })
                 }
             }
 
             override fun onCancelled(error: DatabaseError) {
-                cancel("Unable take games", error.toException())
+                cancel("Unable take collection", error.toException())
             }
 
         })
-        awaitClose { games.removeEventListener(listener) }
+        awaitClose { gamesId.removeEventListener(listener) }
     }
 
-    override fun getUserWishlistGamesById(id: String): Flow<List<Game>> = callbackFlow {
-        val games = database.child("Users").child(id).child("Wishlist")
+    override fun getUserWishlistGamesById(id: String): Flow<List<String>> = callbackFlow {
+        val games = database.child("Wishlist").child(id)
         val listener = games.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 launch {
-                    send(snapshot.children.mapNotNull { it.getValue(Game::class.java) })
+                    send(snapshot.children.mapNotNull { it.key })
                 }
             }
 
             override fun onCancelled(error: DatabaseError) {
-                cancel("Unable take games", error.toException())
+                cancel("Unable take wishlist", error.toException())
             }
 
         })
