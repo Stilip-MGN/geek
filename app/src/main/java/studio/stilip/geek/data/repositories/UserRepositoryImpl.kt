@@ -13,7 +13,6 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
-import studio.stilip.geek.domain.entities.Game
 import studio.stilip.geek.domain.entities.User
 import studio.stilip.geek.domain.repository_interface.UserRepository
 import javax.inject.Inject

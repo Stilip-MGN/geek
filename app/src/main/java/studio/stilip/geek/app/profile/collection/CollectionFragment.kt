@@ -43,6 +43,12 @@ class CollectionFragment : Fragment(R.layout.fragment_collection) {
 
         with(binding) {
             recGames.adapter = adapter
+
+            btnAdd.setOnClickListener {
+                findNavController().navigate(
+                    R.id.action_navigation_collection_to_collection_add,
+                )
+            }
         }
 
         viewLifecycleOwner.lifecycleScope.launch {

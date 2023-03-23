@@ -6,7 +6,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
 import studio.stilip.geek.data.UserCacheManager
 import studio.stilip.geek.domain.usecase.game.GetGameByIdUseCase
-import studio.stilip.geek.domain.usecase.user.GetUserWishlistByIdUseCase
+import studio.stilip.geek.domain.usecase.game.GetUserWishlistByIdUseCase
 import javax.inject.Inject
 
 @HiltViewModel

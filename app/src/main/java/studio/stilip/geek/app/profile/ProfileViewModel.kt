@@ -8,8 +8,8 @@ import studio.stilip.geek.data.UserCacheManager
 import studio.stilip.geek.domain.entities.User
 import studio.stilip.geek.domain.usecase.game.GetGameByIdUseCase
 import studio.stilip.geek.domain.usecase.user.GetUserByIdUseCase
-import studio.stilip.geek.domain.usecase.user.GetUserCollectionByIdUseCase
-import studio.stilip.geek.domain.usecase.user.GetUserWishlistByIdUseCase
+import studio.stilip.geek.domain.usecase.game.GetUserCollectionByIdUseCase
+import studio.stilip.geek.domain.usecase.game.GetUserWishlistByIdUseCase
 import javax.inject.Inject
 
 @HiltViewModel

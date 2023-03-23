@@ -1,4 +1,4 @@
-package studio.stilip.geek.domain.usecase.user
+package studio.stilip.geek.domain.usecase.game
 
 import studio.stilip.geek.domain.repository_interface.GameRepository
 import javax.inject.Inject

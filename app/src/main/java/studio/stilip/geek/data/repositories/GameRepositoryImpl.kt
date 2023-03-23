@@ -9,6 +9,7 @@ import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
 import studio.stilip.geek.domain.entities.Game
 import studio.stilip.geek.domain.repository_interface.GameRepository
 import javax.inject.Inject
@@ -85,6 +86,16 @@ class GameRepositoryImpl @Inject constructor(
 
         })
         awaitClose { games.removeEventListener(listener) }
+    }
+
+    override suspend fun addGamesToCollectionByUserId(userId: String, games: List<String>) {
+        val userCollection = database.child("Collection").child(userId)
+
+        for (gameId in games) {
+            userCollection.child(gameId).updateChildren(
+                mapOf("id" to gameId)
+            ).await()
+        }
     }
 
 }
