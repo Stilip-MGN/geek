@@ -43,6 +43,12 @@ class WishlistFragment : Fragment(R.layout.fragment_collection) {
 
         with(binding) {
             recGames.adapter = adapter
+
+            btnAdd.setOnClickListener {
+                findNavController().navigate(
+                    R.id.action_navigation_wishlist_to_wishlist_add
+                )
+            }
         }
 
         viewLifecycleOwner.lifecycleScope.launch {

@@ -14,4 +14,6 @@ interface GameRepository {
     fun getUserWishlistGamesById(id: String): Flow<List<String>>
 
     suspend fun addGamesToCollectionByUserId(userId: String, games: List<String>)
+
+    suspend fun addGamesToWishlistByUserId(userId: String, games: List<String>)
 }

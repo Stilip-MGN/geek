@@ -98,4 +98,14 @@ class GameRepositoryImpl @Inject constructor(
         }
     }
 
+    override suspend fun addGamesToWishlistByUserId(userId: String, games: List<String>) {
+        val userWishlist = database.child("Wishlist").child(userId)
+
+        for (gameId in games) {
+            userWishlist.child(gameId).updateChildren(
+                mapOf("id" to gameId)
+            ).await()
+        }
+    }
+
 }
