@@ -13,7 +13,7 @@
         android:layout_marginTop="10dp"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:layout_constrainedHeight="true"
-        tools:listitem="@layout/card_game" />
+        tools:listitem="@layout/card_game_del" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/btn_add"

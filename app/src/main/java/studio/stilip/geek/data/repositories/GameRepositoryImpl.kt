@@ -108,4 +108,12 @@ class GameRepositoryImpl @Inject constructor(
         }
     }
 
+    override suspend fun removeGameFromCollectionById(userId: String, gameId: String) {
+        database.child("Collection")
+            .child(userId)
+            .child(gameId)
+            .removeValue()
+            .await()
+    }
+
 }

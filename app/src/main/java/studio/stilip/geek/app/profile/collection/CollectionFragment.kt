@@ -12,7 +12,6 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import studio.stilip.geek.R
 import studio.stilip.geek.app.HostViewModel
-import studio.stilip.geek.app.games.GameAdapter
 import studio.stilip.geek.app.games.gameinfo.GameInfoFragment
 import studio.stilip.geek.databinding.FragmentCollectionBinding
 
@@ -31,7 +30,7 @@ class CollectionFragment : Fragment(R.layout.fragment_collection) {
         hostViewModel.setToolbarTitle(getText(R.string.my_games_collection).toString())
         hostViewModel.setToolbarBackBtnVisible(true)
 
-        val adapter = GameAdapter { id ->
+        val adapter = GameCollectionAdapter({ id ->
             val arg = Bundle().apply {
                 putString(GameInfoFragment.GAME_ID, id)
             }
@@ -39,7 +38,9 @@ class CollectionFragment : Fragment(R.layout.fragment_collection) {
                 R.id.action_navigation_collection_to_game_info,
                 arg
             )
-        }
+        }, { id ->
+            viewModel.onCloseClicked(id)
+        })
 
         with(binding) {
             recGames.adapter = adapter
