@@ -18,4 +18,6 @@ interface GameRepository {
     suspend fun addGamesToWishlistByUserId(userId: String, games: List<String>)
 
     suspend fun removeGameFromCollectionById(userId: String, gameId: String)
+
+    suspend fun removeGameFromWishlistById(userId: String, gameId: String)
 }

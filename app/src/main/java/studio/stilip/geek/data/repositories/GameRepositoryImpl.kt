@@ -116,4 +116,12 @@ class GameRepositoryImpl @Inject constructor(
             .await()
     }
 
+    override suspend fun removeGameFromWishlistById(userId: String, gameId: String) {
+        database.child("Wishlist")
+            .child(userId)
+            .child(gameId)
+            .removeValue()
+            .await()
+    }
+
 }

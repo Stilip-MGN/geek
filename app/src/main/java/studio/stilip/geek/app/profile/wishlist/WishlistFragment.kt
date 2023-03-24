@@ -12,8 +12,8 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import studio.stilip.geek.R
 import studio.stilip.geek.app.HostViewModel
-import studio.stilip.geek.app.games.GameAdapter
 import studio.stilip.geek.app.games.gameinfo.GameInfoFragment
+import studio.stilip.geek.app.profile.collection.GameCollectionAdapter
 import studio.stilip.geek.databinding.FragmentWishlistBinding
 
 @AndroidEntryPoint
@@ -31,7 +31,7 @@ class WishlistFragment : Fragment(R.layout.fragment_collection) {
         hostViewModel.setToolbarTitle(getText(R.string.wishlist).toString())
         hostViewModel.setToolbarBackBtnVisible(true)
 
-        val adapter = GameAdapter { id ->
+        val adapter = GameCollectionAdapter({ id ->
             val arg = Bundle().apply {
                 putString(GameInfoFragment.GAME_ID, id)
             }
@@ -39,7 +39,9 @@ class WishlistFragment : Fragment(R.layout.fragment_collection) {
                 R.id.action_navigation_wishlist_to_game_info,
                 arg
             )
-        }
+        }, { id ->
+            viewModel.onCloseClicked(id)
+        })
 
         with(binding) {
             recGames.adapter = adapter
