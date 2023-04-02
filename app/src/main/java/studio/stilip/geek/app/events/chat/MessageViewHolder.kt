@@ -16,9 +16,10 @@ class MessageViewHolder(
         message = item
 
         textMessage.text = message.text
+        userName.text = message.createdBy
 
         val date = Date(message.createdAt)
         val format = SimpleDateFormat("HH:mm dd.MM.yy")
-        this.time.text = format.format(date)
+        time.text = format.format(date)
     }
 }

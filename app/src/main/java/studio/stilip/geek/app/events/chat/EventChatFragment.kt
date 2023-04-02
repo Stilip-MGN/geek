@@ -2,15 +2,18 @@ package studio.stilip.geek.app.events.chat
 
 import android.os.Bundle
 import android.view.View
+import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.flowWithLifecycle
+import androidx.lifecycle.lifecycleScope
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 import studio.stilip.geek.R
 import studio.stilip.geek.app.HostViewModel
 import studio.stilip.geek.app.hideKeyboard
 import studio.stilip.geek.databinding.FragmentEventChatBinding
-import studio.stilip.geek.domain.entities.Message
 
 @AndroidEntryPoint
 class EventChatFragment : Fragment(R.layout.fragment_event_chat) {
@@ -18,18 +21,13 @@ class EventChatFragment : Fragment(R.layout.fragment_event_chat) {
     private val hostViewModel: HostViewModel by activityViewModels()
     private val viewModel: EventChatViewModel by viewModels()
 
-    val messages = arrayListOf(
-        Message("1", 3818394L, "", "Раз два три"),
-        Message("2", 3818398L, "", "Ич ни сан")
-    )
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         val binding = FragmentEventChatBinding.bind(view)
 
         hostViewModel.setBottomBarVisible(false)
-        // hostViewModel.setToolbarTitle(getText(R.string.title_events).toString())
+        hostViewModel.setToolbarTitle(getText(R.string.title_event).toString())
         hostViewModel.setToolbarBackBtnVisible(true)
 
         val adapter = MessageAdapter(viewModel.userId)
@@ -37,15 +35,23 @@ class EventChatFragment : Fragment(R.layout.fragment_event_chat) {
         with(binding) {
             recMessages.adapter = adapter
 
-            adapter.submitList(messages)
+            editMessage.doOnTextChanged { text, _, _, _ ->
+                viewModel.onMessageChanged(text.toString())
+            }
 
             btnSend.setOnClickListener {
-                val mes = editMessage.text.toString()
-                messages.add(Message("3", 3818399L, viewModel.userId, mes))
-                adapter.submitList(messages)
+                viewModel.onSendClicked()
                 editMessage.setText("")
                 this@EventChatFragment.hideKeyboard()
             }
+        }
+
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewModel.messages
+                .flowWithLifecycle(viewLifecycleOwner.lifecycle)
+                .collect { messages ->
+                    adapter.submitList(messages)
+                }
         }
 
     }
