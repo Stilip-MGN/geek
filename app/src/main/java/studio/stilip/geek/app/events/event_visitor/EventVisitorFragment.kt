@@ -84,6 +84,9 @@ class EventVisitorFragment : Fragment(R.layout.fragment_event_visitor) {
             btnUnsub.setOnClickListener {
                 viewModel.onUnsubscribeClick()
             }
+            btnSub.setOnClickListener {
+                viewModel.onSubscribeClick()
+            }
         }
 
         viewLifecycleOwner.lifecycleScope.launch {
@@ -139,14 +142,6 @@ class EventVisitorFragment : Fragment(R.layout.fragment_event_visitor) {
                     adapter.submitList(members)
                     with(binding) {
                         membersCount.text = "${members.count()}/${countMembers}"
-
-                        if (members.firstOrNull { member -> member.id == viewModel.userId } != null) {
-                            btnSub.visibility = View.GONE
-                            btnUnsub.visibility = View.VISIBLE
-                        } else {
-                            btnUnsub.visibility = View.GONE
-                            btnSub.visibility = View.VISIBLE
-                        }
                     }
                 }
         }
@@ -179,18 +174,6 @@ class EventVisitorFragment : Fragment(R.layout.fragment_event_visitor) {
 
                         gameLogo.setOnClickListener {
                             navigateToGameInformation()
-                        }
-                    }
-                }
-        }
-
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewModel.user
-                .flowWithLifecycle(viewLifecycleOwner.lifecycle)
-                .collect {
-                    with(binding) {
-                        btnSub.setOnClickListener {
-                            viewModel.onSubscribeClick()
                         }
                     }
                 }
