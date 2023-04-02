@@ -4,10 +4,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:paddingVertical="5dp"
-    android:paddingEnd="10dp"
     android:gravity="end"
-    android:paddingStart="60dp">
+    android:paddingVertical="5dp"
+    android:paddingStart="60dp"
+    android:paddingEnd="10dp">
 
     <com.google.android.material.card.MaterialCardView
         android:layout_width="wrap_content"
@@ -21,26 +21,21 @@
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/user_name"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:paddingHorizontal="15dp"
-                tools:text="@tools:sample/full_names" />
-
-            <TextView
                 android:id="@+id/text_message"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="end"
                 android:paddingHorizontal="15dp"
+                android:paddingTop="10dp"
                 android:paddingBottom="5dp"
                 android:textAppearance="?textAppearanceBody1"
                 tools:text="Всем привет! Готовы к началу?" />
 
             <TextView
                 android:id="@+id/time"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:gravity="end"
+                android:layout_gravity="end"
                 android:paddingHorizontal="15dp"
                 android:paddingBottom="10dp"
                 tools:text="18:30" />

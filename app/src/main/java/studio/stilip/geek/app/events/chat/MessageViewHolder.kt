@@ -18,7 +18,7 @@ class MessageViewHolder(
         textMessage.text = message.text
 
         val date = Date(message.createdAt)
-        val format = SimpleDateFormat("HH:mm dd.MM.yyyy")
+        val format = SimpleDateFormat("HH:mm dd.MM.yy")
         this.time.text = format.format(date)
     }
 }
