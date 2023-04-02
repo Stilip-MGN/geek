@@ -44,11 +44,18 @@ class EventFragment : Fragment(R.layout.fragment_event) {
             override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
                 return when (menuItem.itemId) {
                     R.id.menu_edit -> {
+//                        val arg = Bundle().apply {
+//                            putString(EVENT_ID, viewModel.eventId)
+//                        }
+//                        findNavController().navigate(
+//                            R.id.action_navigation_event_to_event_edit,
+//                            arg
+//                        )
                         val arg = Bundle().apply {
                             putString(EVENT_ID, viewModel.eventId)
                         }
                         findNavController().navigate(
-                            R.id.action_navigation_event_to_event_edit,
+                            R.id.action_navigation_event_to_event_chat,
                             arg
                         )
                         true
