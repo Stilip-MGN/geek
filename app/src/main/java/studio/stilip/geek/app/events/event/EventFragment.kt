@@ -38,19 +38,22 @@ class EventFragment : Fragment(R.layout.fragment_event) {
 
         context.addMenuProvider(object : MenuProvider {
             override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
-                menuInflater.inflate(R.menu.edit_menu, menu)
+                menuInflater.inflate(R.menu.edit_chat_menu, menu)
             }
 
             override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
                 return when (menuItem.itemId) {
                     R.id.menu_edit -> {
-//                        val arg = Bundle().apply {
-//                            putString(EVENT_ID, viewModel.eventId)
-//                        }
-//                        findNavController().navigate(
-//                            R.id.action_navigation_event_to_event_edit,
-//                            arg
-//                        )
+                        val arg = Bundle().apply {
+                            putString(EVENT_ID, viewModel.eventId)
+                        }
+                        findNavController().navigate(
+                            R.id.action_navigation_event_to_event_edit,
+                            arg
+                        )
+                        true
+                    }
+                    R.id.menu_chat -> {
                         val arg = Bundle().apply {
                             putString(EVENT_ID, viewModel.eventId)
                         }
