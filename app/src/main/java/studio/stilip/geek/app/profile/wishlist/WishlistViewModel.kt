@@ -3,37 +3,34 @@ package studio.stilip.geek.app.profile.wishlist
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
-import studio.stilip.geek.domain.entities.Game
-import studio.stilip.geek.domain.usecase.authorization.GetCurrentUserRefUseCase
-import studio.stilip.geek.domain.usecase.user.GetUserWishlistByIdUseCase
+import studio.stilip.geek.data.UserCacheManager
+import studio.stilip.geek.domain.usecase.game.GetGameByIdUseCase
+import studio.stilip.geek.domain.usecase.game.GetUserWishlistByIdUseCase
+import studio.stilip.geek.domain.usecase.game.RemoveGameFromWishlistByIdUseCase
 import javax.inject.Inject
 
 @HiltViewModel
 class WishlistViewModel @Inject constructor(
-    private val currentUser: GetCurrentUserRefUseCase,
     private val getWishlistById: GetUserWishlistByIdUseCase,
+    private val getGameById: GetGameByIdUseCase,
+    private val removeGameFromWishlistById: RemoveGameFromWishlistByIdUseCase,
 ) : ViewModel() {
 
-    private val _wishlist = MutableStateFlow<List<Game>>(emptyList())
-    private val userRef = currentUser()
-        .stateIn(viewModelScope, SharingStarted.Eagerly, null)
+    private val userId = UserCacheManager.getUserId()
+    private val wishlistGamesIds = getWishlistById(userId)
+        .stateIn(viewModelScope, SharingStarted.Eagerly, emptyList())
 
-    val wishlist: StateFlow<List<Game>> = _wishlist
+    val wishlist = wishlistGamesIds.map { ids ->
+        ids.map { id ->
+            getGameById(id).first()
+        }
+    }.stateIn(viewModelScope, SharingStarted.Eagerly, emptyList())
 
-    init {
+    fun onCloseClicked(id: String) {
         viewModelScope.launch {
-            userRef.collect {
-                it?.let {
-                    getWishlistById(it.uid).collect { g ->
-                        _wishlist.value = g
-                    }
-                }
-            }
+            removeGameFromWishlistById(userId, id)
         }
     }
 }

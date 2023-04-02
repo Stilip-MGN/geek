@@ -9,7 +9,15 @@ interface GameRepository {
 
     fun getGameById(id: String): Flow<Game>
 
-    fun getUserCollectionGamesById(id: String): Flow<List<Game>>
+    fun getUserCollectionGamesById(id: String): Flow<List<String>>
 
-    fun getUserWishlistGamesById(id: String): Flow<List<Game>>
+    fun getUserWishlistGamesById(id: String): Flow<List<String>>
+
+    suspend fun addGamesToCollectionByUserId(userId: String, games: List<String>)
+
+    suspend fun addGamesToWishlistByUserId(userId: String, games: List<String>)
+
+    suspend fun removeGameFromCollectionById(userId: String, gameId: String)
+
+    suspend fun removeGameFromWishlistById(userId: String, gameId: String)
 }

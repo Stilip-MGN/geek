@@ -9,6 +9,7 @@ import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
 import studio.stilip.geek.domain.entities.Game
 import studio.stilip.geek.domain.repository_interface.GameRepository
 import javax.inject.Inject
@@ -18,15 +19,6 @@ import javax.inject.Singleton
 class GameRepositoryImpl @Inject constructor(
     private val database: DatabaseReference
 ) : GameRepository {
-
-    val games1 = arrayListOf(
-        Game(name = "A", time = "30 min", countPlayers = "2-3", age = "10+"),
-        Game(
-            name = "B", time = "120 min", countPlayers = "1-3", age = "15+",
-            description = "Вышел в поле дед",
-            logo = "https://tesera.ru/images/items/1401961,3/200x200xpa/photo1.png"
-        ),
-    )
 
     override fun getAllGames(): Flow<List<Game>> = callbackFlow {
         val games = database.child("Games")
@@ -62,38 +54,74 @@ class GameRepositoryImpl @Inject constructor(
         awaitClose { games.removeEventListener(listener) }
     }
 
-    override fun getUserCollectionGamesById(id: String): Flow<List<Game>> = callbackFlow {
-        val games = database.child("Users").child(id).child("Collection")
-        val listener = games.addValueEventListener(object : ValueEventListener {
+    override fun getUserCollectionGamesById(id: String): Flow<List<String>> = callbackFlow {
+        val gamesId = database.child("Collection").child(id)
+        val listener = gamesId.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 launch {
-                    send(snapshot.children.mapNotNull { it.getValue(Game::class.java) })
+                    send(snapshot.children.mapNotNull { it.key })
                 }
             }
 
             override fun onCancelled(error: DatabaseError) {
-                cancel("Unable take games", error.toException())
+                cancel("Unable take collection", error.toException())
+            }
+
+        })
+        awaitClose { gamesId.removeEventListener(listener) }
+    }
+
+    override fun getUserWishlistGamesById(id: String): Flow<List<String>> = callbackFlow {
+        val games = database.child("Wishlist").child(id)
+        val listener = games.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                launch {
+                    send(snapshot.children.mapNotNull { it.key })
+                }
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                cancel("Unable take wishlist", error.toException())
             }
 
         })
         awaitClose { games.removeEventListener(listener) }
     }
 
-    override fun getUserWishlistGamesById(id: String): Flow<List<Game>> = callbackFlow {
-        val games = database.child("Users").child(id).child("Wishlist")
-        val listener = games.addValueEventListener(object : ValueEventListener {
-            override fun onDataChange(snapshot: DataSnapshot) {
-                launch {
-                    send(snapshot.children.mapNotNull { it.getValue(Game::class.java) })
-                }
-            }
+    override suspend fun addGamesToCollectionByUserId(userId: String, games: List<String>) {
+        val userCollection = database.child("Collection").child(userId)
 
-            override fun onCancelled(error: DatabaseError) {
-                cancel("Unable take games", error.toException())
-            }
+        for (gameId in games) {
+            userCollection.child(gameId).updateChildren(
+                mapOf("id" to gameId)
+            ).await()
+        }
+    }
 
-        })
-        awaitClose { games.removeEventListener(listener) }
+    override suspend fun addGamesToWishlistByUserId(userId: String, games: List<String>) {
+        val userWishlist = database.child("Wishlist").child(userId)
+
+        for (gameId in games) {
+            userWishlist.child(gameId).updateChildren(
+                mapOf("id" to gameId)
+            ).await()
+        }
+    }
+
+    override suspend fun removeGameFromCollectionById(userId: String, gameId: String) {
+        database.child("Collection")
+            .child(userId)
+            .child(gameId)
+            .removeValue()
+            .await()
+    }
+
+    override suspend fun removeGameFromWishlistById(userId: String, gameId: String) {
+        database.child("Wishlist")
+            .child(userId)
+            .child(gameId)
+            .removeValue()
+            .await()
     }
 
 }
