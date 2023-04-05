@@ -53,4 +53,6 @@
     <string name="sure_want_to_delete">Вы действительно хотите удалить?</string>
     <string name="adding_title">Добавление</string>
     <string name="select_games_for_adding">Выберите игры для добавления:</string>
+    <string name="enter_message">Введите сообщение</string>
+    <string name="chat_title">Чат</string>
 </resources>

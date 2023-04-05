@@ -25,11 +25,12 @@ class EventVisitorViewModel @Inject constructor(
     private val getRoundsByEventId: GetRoundsByEventIdUseCase,
     stateHandle: SavedStateHandle
 ) : ViewModel() {
-    private val _membersId = getMembersByEventId(stateHandle[EVENT_ID]!!)
-        .stateIn(viewModelScope, SharingStarted.Eagerly, emptyList())
 
     val userId = UserCacheManager.getUserId()
     val eventId: String = stateHandle[EVENT_ID]!!
+
+    private val _membersId = getMembersByEventId(eventId)
+        .stateIn(viewModelScope, SharingStarted.Eagerly, emptyList())
 
     val event = getEvent(eventId)
         .stateIn(viewModelScope, SharingStarted.Eagerly, Event())
@@ -37,9 +38,6 @@ class EventVisitorViewModel @Inject constructor(
     val game = event.flatMapLatest { ev ->
         getGameById(ev.gameId)
     }.stateIn(viewModelScope, SharingStarted.Eagerly, Game())
-
-    val user = getUserById(userId)
-        .stateIn(viewModelScope, SharingStarted.Eagerly, User())
 
     val members = _membersId.flatMapLatest { ids ->
         flow { emit(ids.map { id -> getUserById(id).first() }) }

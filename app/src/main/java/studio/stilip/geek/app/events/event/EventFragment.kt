@@ -38,7 +38,7 @@ class EventFragment : Fragment(R.layout.fragment_event) {
 
         context.addMenuProvider(object : MenuProvider {
             override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
-                menuInflater.inflate(R.menu.edit_menu, menu)
+                menuInflater.inflate(R.menu.edit_chat_menu, menu)
             }
 
             override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
@@ -49,6 +49,16 @@ class EventFragment : Fragment(R.layout.fragment_event) {
                         }
                         findNavController().navigate(
                             R.id.action_navigation_event_to_event_edit,
+                            arg
+                        )
+                        true
+                    }
+                    R.id.menu_chat -> {
+                        val arg = Bundle().apply {
+                            putString(EVENT_ID, viewModel.eventId)
+                        }
+                        findNavController().navigate(
+                            R.id.action_navigation_event_to_event_chat,
                             arg
                         )
                         true
@@ -90,6 +100,9 @@ class EventFragment : Fragment(R.layout.fragment_event) {
             btnUnsub.setOnClickListener {
                 viewModel.onUnsubscribeClick()
             }
+            btnSub.setOnClickListener {
+                viewModel.onSubscribeClick()
+            }
             btnAddRound.setOnClickListener {
                 RoundDialog { title ->
                     viewModel.onAddRoundClicked(title)
@@ -104,21 +117,21 @@ class EventFragment : Fragment(R.layout.fragment_event) {
                 }
                 .flowWithLifecycle(viewLifecycleOwner.lifecycle)
                 .collectLatest { (rounds, members) ->
-                    roundAdapter.submitList(rounds.map { r ->
-                        with(binding) {
-                            if (rounds.isNotEmpty()) {
+                    with(binding) {
+                        if (rounds.isNotEmpty()) {
+                            btnSub.visibility = View.GONE
+                            btnUnsub.visibility = View.GONE
+                        } else {
+                            if (members.firstOrNull { member -> member.id == viewModel.userId } != null) {
                                 btnSub.visibility = View.GONE
-                                btnUnsub.visibility = View.GONE
+                                btnUnsub.visibility = View.VISIBLE
                             } else {
-                                if (members.firstOrNull { member -> member.id == viewModel.userId } != null) {
-                                    btnSub.visibility = View.GONE
-                                    btnUnsub.visibility = View.VISIBLE
-                                } else {
-                                    btnUnsub.visibility = View.GONE
-                                    btnSub.visibility = View.VISIBLE
-                                }
+                                btnUnsub.visibility = View.GONE
+                                btnSub.visibility = View.VISIBLE
                             }
                         }
+                    }
+                    roundAdapter.submitList(rounds.map { r ->
                         r.copy(scores = r.scores.map { s ->
                             s.copy(members = members)
                         })
@@ -149,13 +162,7 @@ class EventFragment : Fragment(R.layout.fragment_event) {
                     with(binding) {
                         membersCount.text = "${members.count()}/${countMembers}"
 
-                        if (members.firstOrNull { member -> member.id == viewModel.userId } != null) {
-                            btnSub.visibility = View.GONE
-                            btnUnsub.visibility = View.VISIBLE
-                        } else {
-                            btnUnsub.visibility = View.GONE
-                            btnSub.visibility = View.VISIBLE
-                        }
+
                     }
                 }
         }
@@ -188,18 +195,6 @@ class EventFragment : Fragment(R.layout.fragment_event) {
 
                         gameLogo.setOnClickListener {
                             navigateToGameInformation()
-                        }
-                    }
-                }
-        }
-
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewModel.user
-                .flowWithLifecycle(viewLifecycleOwner.lifecycle)
-                .collect {
-                    with(binding) {
-                        btnSub.setOnClickListener {
-                            viewModel.onSubscribeClick()
                         }
                     }
                 }

@@ -1,10 +1,17 @@
 package studio.stilip.geek.app.events.event_visitor
 
+import android.content.Context
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
 import android.view.View
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -15,6 +22,7 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
 import studio.stilip.geek.R
 import studio.stilip.geek.app.HostViewModel
+import studio.stilip.geek.app.events.event.EventFragment
 import studio.stilip.geek.app.events.event.MemberAdapter
 import studio.stilip.geek.app.events.event_visitor.round.RoundVisitorAdapter
 import studio.stilip.geek.app.games.gameinfo.GameInfoFragment
@@ -25,6 +33,33 @@ class EventVisitorFragment : Fragment(R.layout.fragment_event_visitor) {
 
     private val hostViewModel: HostViewModel by activityViewModels()
     private val viewModel: EventVisitorViewModel by viewModels()
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        context as AppCompatActivity
+
+        context.addMenuProvider(object : MenuProvider {
+            override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
+                menuInflater.inflate(R.menu.chat_menu, menu)
+            }
+
+            override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
+                return when (menuItem.itemId) {
+                    R.id.menu_chat -> {
+                        val arg = Bundle().apply {
+                            putString(EventFragment.EVENT_ID, viewModel.eventId)
+                        }
+                        findNavController().navigate(
+                            R.id.action_navigation_event_visitor_to_event_chat,
+                            arg
+                        )
+                        true
+                    }
+                    else -> false
+                }
+            }
+        }, this, Lifecycle.State.RESUMED)
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -48,6 +83,9 @@ class EventVisitorFragment : Fragment(R.layout.fragment_event_visitor) {
 
             btnUnsub.setOnClickListener {
                 viewModel.onUnsubscribeClick()
+            }
+            btnSub.setOnClickListener {
+                viewModel.onSubscribeClick()
             }
         }
 
@@ -104,14 +142,6 @@ class EventVisitorFragment : Fragment(R.layout.fragment_event_visitor) {
                     adapter.submitList(members)
                     with(binding) {
                         membersCount.text = "${members.count()}/${countMembers}"
-
-                        if (members.firstOrNull { member -> member.id == viewModel.userId } != null) {
-                            btnSub.visibility = View.GONE
-                            btnUnsub.visibility = View.VISIBLE
-                        } else {
-                            btnUnsub.visibility = View.GONE
-                            btnSub.visibility = View.VISIBLE
-                        }
                     }
                 }
         }
@@ -144,18 +174,6 @@ class EventVisitorFragment : Fragment(R.layout.fragment_event_visitor) {
 
                         gameLogo.setOnClickListener {
                             navigateToGameInformation()
-                        }
-                    }
-                }
-        }
-
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewModel.user
-                .flowWithLifecycle(viewLifecycleOwner.lifecycle)
-                .collect {
-                    with(binding) {
-                        btnSub.setOnClickListener {
-                            viewModel.onSubscribeClick()
                         }
                     }
                 }
