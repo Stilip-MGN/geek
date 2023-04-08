@@ -55,4 +55,10 @@
     <string name="select_games_for_adding">Выберите игры для добавления:</string>
     <string name="enter_message">Введите сообщение</string>
     <string name="chat_title">Чат</string>
+    <string name="filter">Фильтр</string>
+    <string name="i_organizer">Я - Организатор</string>
+    <string name="i_member">Я - Участник</string>
+    <string name="i_not_member">Я - Не участник</string>
+    <string name="actual">Актуальные</string>
+    <string name="not_actual">Неактуальные</string>
 </resources>
