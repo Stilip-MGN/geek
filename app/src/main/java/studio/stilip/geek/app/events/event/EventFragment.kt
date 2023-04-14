@@ -6,6 +6,7 @@ import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
+import android.widget.ArrayAdapter
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
@@ -95,7 +96,7 @@ class EventFragment : Fragment(R.layout.fragment_event) {
 
         with(binding) {
             recMembers.adapter = adapter
-            recRounds.adapter = roundAdapter
+            recSets.adapter = roundAdapter
 
             btnUnsub.setOnClickListener {
                 viewModel.onUnsubscribeClick()
@@ -103,7 +104,7 @@ class EventFragment : Fragment(R.layout.fragment_event) {
             btnSub.setOnClickListener {
                 viewModel.onSubscribeClick()
             }
-            btnAddRound.setOnClickListener {
+            btnAddSet.setOnClickListener {
                 RoundDialog { title ->
                     viewModel.onAddRoundClicked(title)
                 }.show(parentFragmentManager, "dialog")
@@ -161,8 +162,6 @@ class EventFragment : Fragment(R.layout.fragment_event) {
                     adapter.submitList(members)
                     with(binding) {
                         membersCount.text = "${members.count()}/${countMembers}"
-
-
                     }
                 }
         }
