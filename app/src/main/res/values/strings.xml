@@ -61,4 +61,6 @@
     <string name="i_not_member">Я - Не участник</string>
     <string name="actual">Актуальные</string>
     <string name="not_actual">Неактуальные</string>
+    <string name="delete">Удалить</string>
+    <string name="name_or_description_for_set">Название или описание для партии</string>
 </resources>
