@@ -4,16 +4,15 @@ import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.ValueEventListener
+import com.google.firebase.database.ktx.snapshots
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
-import studio.stilip.geek.domain.entities.Event
-import studio.stilip.geek.domain.entities.Round
-import studio.stilip.geek.domain.entities.Score
-import studio.stilip.geek.domain.entities.User
+import studio.stilip.geek.domain.entities.*
+import studio.stilip.geek.domain.entities.Set
 import studio.stilip.geek.domain.repository_interface.EventRepository
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -210,5 +209,77 @@ class EventRepositoryImpl @Inject constructor(
             .child(roundId)
             .removeValue()
             .await()
+    }
+
+    override fun getSetById(id: String): Flow<Set> = callbackFlow {
+        val set = database.child("Sets").child(id)
+        val listener = set.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                launch {
+                    snapshot.getValue(Set::class.java)?.let { send(it) }
+                }
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                cancel("Unable take set", error.toException())
+            }
+
+        })
+        awaitClose { set.removeEventListener(listener) }
+    }
+
+    override fun getMembersScoresBySetId(id: String): Flow<List<String>> = callbackFlow {
+        val membersScores = database.child("Sets").child(id).child("MemberScore")
+        val listener = membersScores.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                launch {
+                    send(snapshot.children.mapNotNull { it.key })
+                }
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                cancel("Unable take membersScores", error.toException())
+            }
+
+        })
+        awaitClose { membersScores.removeEventListener(listener) }
+    }
+
+    override fun getMemberScoreById(id: String): Flow<MemberScore> = callbackFlow {
+        val memberScore = database.child("MemberScore").child(id)
+        val listener = memberScore.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                launch {
+                    snapshot.getValue(MemberScore::class.java)?.let { send(it) }
+                }
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                cancel("Unable take MemberScore", error.toException())
+            }
+
+        })
+        awaitClose { memberScore.removeEventListener(listener) }
+    }
+
+    override suspend fun updateSet(set: Set) {
+        val refSet = database.child("Sets").child(set.id)
+        refSet.updateChildren(
+            mapOf(
+                "title" to set.title,
+            )
+        )
+        val refMS = database.child("MemberScore")
+        val membersScores = database.child("Sets")
+            .child(set.id)
+            .child("MemberScore")
+
+        membersScores.removeValue()
+        set.membersScores.forEach { ms ->
+            refMS.child(ms.id).setValue(ms)
+            membersScores.child(ms.id).updateChildren(
+                mapOf("id" to ms.id)
+            )
+        }
     }
 }

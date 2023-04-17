@@ -105,9 +105,19 @@ class EventFragment : Fragment(R.layout.fragment_event) {
                 viewModel.onSubscribeClick()
             }
             btnAddSet.setOnClickListener {
-                RoundDialog { title ->
-                    viewModel.onAddRoundClicked(title)
-                }.show(parentFragmentManager, "dialog")
+//                RoundDialog { title ->
+//                    viewModel.onAddRoundClicked(title)
+//                }.show(parentFragmentManager, "dialog")
+                //val idRound = spRounds.selectedItem.toString()
+                val arg = Bundle().apply {
+                    putString(EVENT_ID, viewModel.eventId)
+                    putString(ROUND_ID, "SNCNkNsniosoboba")
+                    putString(SET_ID, "LMcsguiquicqoca")
+                }
+                findNavController().navigate(
+                    R.id.action_navigation_event_to_set_edit,
+                    arg
+                )
             }
         }
 
@@ -202,5 +212,7 @@ class EventFragment : Fragment(R.layout.fragment_event) {
 
     companion object {
         const val EVENT_ID = "event_id"
+        const val ROUND_ID = "round_id"
+        const val SET_ID = "set_id"
     }
 }
