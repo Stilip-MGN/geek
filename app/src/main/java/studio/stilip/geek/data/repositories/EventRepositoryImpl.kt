@@ -306,4 +306,37 @@ class EventRepositoryImpl @Inject constructor(
         })
         awaitClose { rounds.removeEventListener(listener) }
     }
+
+    override suspend fun createSet(
+        title: String,
+        membersScores: List<MemberScore>,
+        eventId: String,
+        roundId: String
+    ) {
+        val refSet = database.child("Sets").push()
+        refSet.updateChildren(
+            mapOf(
+                "id" to refSet.key,
+                "title" to title,
+            )
+        )
+        val refRoundSets = database.child("RoundsInfo")
+            .child(eventId).child(roundId).child("Sets")
+
+        refRoundSets.child(refSet.key!!).updateChildren(
+            mapOf("id" to refSet.key)
+        )
+
+        val refMS = database.child("MemberScore")
+        val refMembersScores = database.child("Sets")
+            .child(refSet.key!!)
+            .child("MemberScore")
+
+        membersScores.forEach { ms ->
+            refMS.child(ms.id).setValue(ms)
+            refMembersScores.child(ms.id).updateChildren(
+                mapOf("id" to ms.id)
+            )
+        }
+    }
 }

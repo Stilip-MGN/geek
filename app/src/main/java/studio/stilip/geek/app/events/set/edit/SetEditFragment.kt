@@ -1,4 +1,4 @@
-package studio.stilip.geek.app.events.set
+package studio.stilip.geek.app.events.set.edit
 
 import android.content.Context
 import android.os.Bundle
@@ -15,10 +15,14 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import studio.stilip.geek.R
 import studio.stilip.geek.app.HostViewModel
+import studio.stilip.geek.app.events.event.EventFragment
+import studio.stilip.geek.app.events.set.UserScoreDialog
+import studio.stilip.geek.app.events.set.UserWithScoreAdapter
 import studio.stilip.geek.databinding.FragmentSetEditBinding
 
 @AndroidEntryPoint
@@ -70,6 +74,26 @@ class SetEditFragment : Fragment(R.layout.fragment_set_edit) {
                 .flowWithLifecycle(viewLifecycleOwner.lifecycle)
                 .collect { list ->
                     adapter.submitList(list)
+                }
+        }
+
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewModel.setUpdated
+                .flowWithLifecycle(viewLifecycleOwner.lifecycle)
+                .collect { isSuccess ->
+                    when (isSuccess) {
+                        true -> {
+                            val arg = Bundle().apply {
+                                putString(EventFragment.EVENT_ID, viewModel.eventId)
+                            }
+                            findNavController().navigate(
+                                R.id.action_navigation_set_edit_to_event,
+                                arg
+                            )
+                        }
+                        false -> {}
+                        null -> {}
+                    }
                 }
         }
 

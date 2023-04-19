@@ -54,6 +54,8 @@ class EventViewModel @Inject constructor(
         flow {
             val sets = round.setsIds.map { id -> getSetById(id).first() }
 
+            println("${sets.size}")
+
             val list = sets.map { set ->
                 val ids = getMembersScoresBySetId(set.id).first()
                 val listMS = ids.map { id ->

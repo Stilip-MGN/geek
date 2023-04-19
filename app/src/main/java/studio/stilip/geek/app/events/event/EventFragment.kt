@@ -113,11 +113,10 @@ class EventFragment : Fragment(R.layout.fragment_event) {
             btnAddSet.setOnClickListener {
                 val arg = Bundle().apply {
                     putString(EVENT_ID, viewModel.eventId)
-                    putString(ROUND_ID, "SNCNkNsniosoboba")
-                    putString(SET_ID, "LMcsguiquicqoca")
+                    putString(ROUND_ID, viewModel.currentRound.value.id)
                 }
                 findNavController().navigate(
-                    R.id.action_navigation_event_to_set_edit,
+                    R.id.action_navigation_event_to_set_create,
                     arg
                 )
             }

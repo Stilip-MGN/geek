@@ -1,4 +1,4 @@
-package studio.stilip.geek.app.events.set
+package studio.stilip.geek.app.events.set.edit
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
@@ -28,9 +28,10 @@ class SetEditViewModel @Inject constructor(
 ) : ViewModel() {
 
     val membersScores = MutableStateFlow(emptyList<UserWithScore>())
+    val setUpdated = MutableStateFlow<Boolean?>(null)
     private val _setTitle = MutableStateFlow("")
 
-    private val eventId: String = stateHandle[EVENT_ID]!!
+    val eventId: String = stateHandle[EVENT_ID]!!
     private val roundId: String = stateHandle[ROUND_ID]!!
     private val setId: String = stateHandle[SET_ID]!!
 
@@ -96,6 +97,7 @@ class SetEditViewModel @Inject constructor(
                 membersScores.value.map { x -> MemberScore(x.id, x.user.id, x.score) }
             )
             updateSet(result)
+            setUpdated.value = true
         }
     }
 

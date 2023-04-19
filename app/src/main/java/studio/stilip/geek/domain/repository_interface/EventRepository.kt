@@ -53,4 +53,11 @@ interface EventRepository {
     suspend fun updateSet(set: Set)
 
     fun getRoundsByEventId2(eventId: String): Flow<List<RoundNew>>
+
+    suspend fun createSet(
+        title: String,
+        membersScores: List<MemberScore>,
+        eventId: String,
+        roundId: String
+    )
 }
