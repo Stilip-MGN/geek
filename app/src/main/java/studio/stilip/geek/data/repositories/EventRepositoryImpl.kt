@@ -4,7 +4,6 @@ import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.ValueEventListener
-import com.google.firebase.database.ktx.snapshots
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
@@ -281,5 +280,30 @@ class EventRepositoryImpl @Inject constructor(
                 mapOf("id" to ms.id)
             )
         }
+    }
+
+    override fun getRoundsByEventId2(eventId: String): Flow<List<RoundNew>> = callbackFlow {
+        val rounds = database.child("RoundsInfo").child(eventId)
+        val listener = rounds.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                launch {
+                    send(snapshot.children.mapNotNull {
+                        val round = it.getValue(RoundNew::class.java)
+
+                        val setsIds = snapshot.child(round!!.id)
+                            .child("Sets").children.mapNotNull { ds ->
+                                ds.key
+                            }
+                        round.copy(setsIds = setsIds)
+                    })
+                }
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                cancel("Unable take rounds", error.toException())
+            }
+
+        })
+        awaitClose { rounds.removeEventListener(listener) }
     }
 }

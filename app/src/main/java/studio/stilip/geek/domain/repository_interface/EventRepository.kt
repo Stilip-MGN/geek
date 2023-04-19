@@ -1,9 +1,7 @@
 package studio.stilip.geek.domain.repository_interface
 
 import kotlinx.coroutines.flow.Flow
-import studio.stilip.geek.domain.entities.Event
-import studio.stilip.geek.domain.entities.MemberScore
-import studio.stilip.geek.domain.entities.Round
+import studio.stilip.geek.domain.entities.*
 import studio.stilip.geek.domain.entities.Set
 
 interface EventRepository {
@@ -53,4 +51,6 @@ interface EventRepository {
     fun getMemberScoreById(id: String): Flow<MemberScore>
 
     suspend fun updateSet(set: Set)
+
+    fun getRoundsByEventId2(eventId: String): Flow<List<RoundNew>>
 }
