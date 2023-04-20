@@ -97,7 +97,7 @@ class SetEditViewModel @Inject constructor(
                 _setTitle.value,
                 membersScores.value.map { x -> MemberScore(x.id, x.user.id, x.score) }
             )
-            updateSet(result)
+            updateSet(result, eventId)
             setUpdatedOrDeleted.value = true
         }
     }

@@ -51,11 +51,11 @@ class EventViewModel @Inject constructor(
     val rounds = getRoundsByEventId(eventId)
         .stateIn(viewModelScope, SharingStarted.Eagerly, emptyList())
 
-    val sets = currentRound.flatMapLatest { round ->
+    val sets = currentRound.flatMapLatest { current ->
         flow {
-            val sets = round.setsIds.map { id -> getSetById(id).first() }
-
-            println("${sets.size}")
+            if (current == RoundNew())
+                return@flow
+            val sets = current.setsIds.map { id -> getSetById(id).first() }
 
             val list = sets.map { set ->
                 val ids = getMembersScoresBySetId(set.id).first()
@@ -75,7 +75,6 @@ class EventViewModel @Inject constructor(
                     membersScores = usersWithScore
                 )
             }
-
             emit(list)
         }
     }.stateIn(viewModelScope, SharingStarted.Eagerly, emptyList())
@@ -93,7 +92,8 @@ class EventViewModel @Inject constructor(
     }
 
     fun onRoundChanged(round: RoundNew) {
-        if (round == currentRound.value) return
+        if (round == currentRound.value)
+            currentRound.value = RoundNew()
         viewModelScope.launch {
             currentRound.value = round
         }

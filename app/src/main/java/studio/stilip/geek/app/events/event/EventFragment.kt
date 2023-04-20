@@ -168,6 +168,9 @@ class EventFragment : Fragment(R.layout.fragment_event) {
                     updateUI()
                     roundAdapter.clear()
                     roundAdapter.addAll(rounds)
+
+                    if (rounds.isNotEmpty())
+                        binding.spRounds.setSelection(rounds.size - 1)
                 }
         }
 

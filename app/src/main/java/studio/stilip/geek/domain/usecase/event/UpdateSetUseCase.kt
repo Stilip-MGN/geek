@@ -7,5 +7,5 @@ import javax.inject.Inject
 class UpdateSetUseCase @Inject constructor(
     private val repository: EventRepository
 ) {
-    suspend operator fun invoke(set: Set) = repository.updateSet(set)
+    suspend operator fun invoke(set: Set, eventId: String) = repository.updateSet(set, eventId)
 }

@@ -261,13 +261,13 @@ class EventRepositoryImpl @Inject constructor(
         awaitClose { memberScore.removeEventListener(listener) }
     }
 
-    override suspend fun updateSet(set: Set) {
+    override suspend fun updateSet(set: Set, eventId: String) {
         val refSet = database.child("Sets").child(set.id)
         refSet.updateChildren(
             mapOf(
                 "title" to set.title,
             )
-        )
+        ).await()
         val refMS = database.child("MemberScore")
         val membersScores = database.child("Sets")
             .child(set.id)
@@ -275,11 +275,23 @@ class EventRepositoryImpl @Inject constructor(
 
         membersScores.removeValue()
         set.membersScores.forEach { ms ->
-            refMS.child(ms.id).setValue(ms)
+            refMS.child(ms.id).updateChildren(
+                mapOf(
+                    "id" to ms.id,
+                    "memberId" to ms.memberId,
+                    "score" to ms.score
+                )
+            ).await()
             membersScores.child(ms.id).updateChildren(
                 mapOf("id" to ms.id)
-            )
+            ).await()
         }
+
+        database.child("RoundsInfo")
+            .child(eventId).child(eventId).updateChildren(mapOf("id" to "null_name")).await()
+        database.child("RoundsInfo")
+            .child(eventId).child(eventId).removeValue().await()
+
     }
 
     override fun getRoundsByEventId2(eventId: String): Flow<List<RoundNew>> = callbackFlow {
@@ -338,6 +350,11 @@ class EventRepositoryImpl @Inject constructor(
                 mapOf("id" to ms.id)
             )
         }
+
+        database.child("RoundsInfo")
+            .child(eventId).child(eventId).updateChildren(mapOf("id" to "null_name")).await()
+        database.child("RoundsInfo")
+            .child(eventId).child(eventId).removeValue().await()
     }
 
     override suspend fun createRoundNew(title: String, eventId: String) {
@@ -366,6 +383,11 @@ class EventRepositoryImpl @Inject constructor(
         set.membersScores.forEach { ms ->
             refMS.child(ms.id).removeValue()
         }
+
+        database.child("RoundsInfo")
+            .child(eventId).child(eventId).updateChildren(mapOf("id" to "null_name")).await()
+        database.child("RoundsInfo")
+            .child(eventId).child(eventId).removeValue().await()
 
     }
 }
