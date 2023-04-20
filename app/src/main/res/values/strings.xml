@@ -45,8 +45,8 @@
     <string name="add_player">Добавить игрока</string>
     <string name="select_player">Выберите игрока</string>
     <string name="add_round">Добавить партию</string>
-    <string name="create_round">Создание партии</string>
-    <string name="write_title_round">Введите название партии</string>
+    <string name="create_round">Создание раунд</string>
+    <string name="write_title_round">Введите название раунда</string>
     <string name="cancel">Закрыть</string>
     <string name="accept">Подтвердить</string>
     <string name="btn_create">Создать</string>
