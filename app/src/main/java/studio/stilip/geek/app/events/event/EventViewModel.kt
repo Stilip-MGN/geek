@@ -26,6 +26,7 @@ class EventViewModel @Inject constructor(
     private val getMembersScoresBySetId: GetMembersScoresBySetIdUseCase,
     private val getMemberScoreById: GetMemberScoreByIdUseCase,
     private val getSetById: GetSetByIdUseCase,
+    private val createRound: CreateRoundNewUseCase,
     stateHandle: SavedStateHandle
 ) : ViewModel() {
 
@@ -95,6 +96,12 @@ class EventViewModel @Inject constructor(
         if (round == currentRound.value) return
         viewModelScope.launch {
             currentRound.value = round
+        }
+    }
+
+    fun onCreateClicked(title: String) {
+        viewModelScope.launch {
+            createRound(title, eventId)
         }
     }
 }

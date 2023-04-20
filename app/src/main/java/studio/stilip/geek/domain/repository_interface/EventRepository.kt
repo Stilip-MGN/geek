@@ -60,4 +60,6 @@ interface EventRepository {
         eventId: String,
         roundId: String
     )
+
+    suspend fun createRoundNew(title: String, eventId: String)
 }

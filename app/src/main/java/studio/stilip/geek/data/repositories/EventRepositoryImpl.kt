@@ -339,4 +339,16 @@ class EventRepositoryImpl @Inject constructor(
             )
         }
     }
+
+    override suspend fun createRoundNew(title: String, eventId: String) {
+        val refRoundSets = database.child("RoundsInfo")
+            .child(eventId).push()
+
+        refRoundSets.updateChildren(
+            mapOf(
+                "id" to refRoundSets.key,
+                "title" to title
+            )
+        ).await()
+    }
 }

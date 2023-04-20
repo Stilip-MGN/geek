@@ -121,6 +121,12 @@ class EventFragment : Fragment(R.layout.fragment_event) {
                 )
             }
 
+            btnAddRound.setOnClickListener {
+                RoundDialog { title ->
+                    viewModel.onCreateClicked(title)
+                }.show(parentFragmentManager, "dialog")
+            }
+
             spRounds.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
                 override fun onNothingSelected(parent: AdapterView<*>?) {}
 
@@ -138,6 +144,7 @@ class EventFragment : Fragment(R.layout.fragment_event) {
         fun updateUI() {
             with(binding) {
                 if (isCanChangeMemberStatus) {
+                    btnAddSet.visibility = View.GONE
                     if (isUserSubscribed) {
                         btnSub.visibility = View.GONE
                         btnUnsub.visibility = View.VISIBLE
@@ -148,6 +155,7 @@ class EventFragment : Fragment(R.layout.fragment_event) {
                 } else {
                     btnSub.visibility = View.GONE
                     btnUnsub.visibility = View.GONE
+                    btnAddSet.visibility = View.VISIBLE
                 }
             }
         }

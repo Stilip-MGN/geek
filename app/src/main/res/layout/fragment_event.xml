@@ -128,7 +128,6 @@
             app:layout_constraintTop_toBottomOf="@id/date_title"
             tools:text="@tools:sample/date/hhmm" />
 
-
         <Button
             android:id="@+id/btn_sub"
             android:layout_width="0dp"
@@ -203,11 +202,11 @@
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="15dp"
             android:layout_marginTop="10dp"
-            android:spinnerMode="dialog"
+            android:spinnerMode="dropdown"
             app:layout_constraintEnd_toStartOf="@id/btn_add_round"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/rec_members"
-            tools:listitem="@android:layout/simple_spinner_dropdown_item"/>
+            tools:listitem="@layout/spinner_round" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/btn_add_round"
