@@ -62,4 +62,6 @@ interface EventRepository {
     )
 
     suspend fun createRoundNew(title: String, eventId: String)
+
+    suspend fun deleteSet(set: Set, eventId: String, roundId: String)
 }

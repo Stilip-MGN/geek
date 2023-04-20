@@ -46,6 +46,10 @@ class SetEditFragment : Fragment(R.layout.fragment_set_edit) {
                         viewModel.onCompleteClicked()
                         true
                     }
+                    R.id.menu_delete -> {
+                        viewModel.onDeleteClicked()
+                        false
+                    }
                     else -> false
                 }
             }
@@ -78,7 +82,7 @@ class SetEditFragment : Fragment(R.layout.fragment_set_edit) {
         }
 
         viewLifecycleOwner.lifecycleScope.launch {
-            viewModel.setUpdated
+            viewModel.setUpdatedOrDeleted
                 .flowWithLifecycle(viewLifecycleOwner.lifecycle)
                 .collect { isSuccess ->
                     when (isSuccess) {

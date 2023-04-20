@@ -24,11 +24,12 @@ class SetEditViewModel @Inject constructor(
     private val getMembersScoresBySetId: GetMembersScoresBySetIdUseCase,
     private val getMemberScoreById: GetMemberScoreByIdUseCase,
     private val updateSet: UpdateSetUseCase,
+    private val deleteSet: DeleteSetUseCase,
     stateHandle: SavedStateHandle
 ) : ViewModel() {
 
     val membersScores = MutableStateFlow(emptyList<UserWithScore>())
-    val setUpdated = MutableStateFlow<Boolean?>(null)
+    val setUpdatedOrDeleted = MutableStateFlow<Boolean?>(null)
     private val _setTitle = MutableStateFlow("")
 
     val eventId: String = stateHandle[EVENT_ID]!!
@@ -97,7 +98,19 @@ class SetEditViewModel @Inject constructor(
                 membersScores.value.map { x -> MemberScore(x.id, x.user.id, x.score) }
             )
             updateSet(result)
-            setUpdated.value = true
+            setUpdatedOrDeleted.value = true
+        }
+    }
+
+    fun onDeleteClicked() {
+        viewModelScope.launch {
+            val result = Set(
+                setId,
+                _setTitle.value,
+                membersScores.value.map { x -> MemberScore(x.id, x.user.id, x.score) }
+            )
+            deleteSet(result, eventId, roundId)
+            setUpdatedOrDeleted.value = true
         }
     }
 

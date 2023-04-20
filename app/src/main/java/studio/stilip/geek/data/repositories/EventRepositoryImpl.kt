@@ -351,4 +351,21 @@ class EventRepositoryImpl @Inject constructor(
             )
         ).await()
     }
+
+    override suspend fun deleteSet(set: Set, eventId: String, roundId: String) {
+        database.child("RoundsInfo")
+            .child(eventId)
+            .child(roundId)
+            .child("Sets")
+            .child(set.id)
+            .removeValue()
+
+        database.child("Sets").child(set.id).removeValue()
+
+        val refMS = database.child("MemberScore")
+        set.membersScores.forEach { ms ->
+            refMS.child(ms.id).removeValue()
+        }
+
+    }
 }
