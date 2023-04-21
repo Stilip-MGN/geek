@@ -33,13 +33,13 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:hint="@string/nickname"
-            android:inputType="textEmailAddress"
+            android:inputType="textCapSentences"
             android:lines="1" />
 
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/edit_description_layout"
+        android:id="@+id/edit_status_layout"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -51,12 +51,12 @@
         app:boxCornerRadiusTopStart="10dp">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/edit_description"
+            android:id="@+id/edit_status"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:hint="@string/description_title"
+            android:hint="@string/title_status"
             android:importantForAutofill="no"
-            android:inputType="textMultiLine" />
+            android:inputType="textCapSentences|textMultiLine" />
 
     </com.google.android.material.textfield.TextInputLayout>
 
