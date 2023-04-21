@@ -1,25 +1,26 @@
-package studio.stilip.geek.app.events.event_visitor.round.score
+package studio.stilip.geek.app.events.set
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
-import studio.stilip.geek.app.events.event.round.score.ScoreDiffCallback
 import studio.stilip.geek.databinding.CardMemberScoreVisitorBinding
-import studio.stilip.geek.domain.entities.Score
+import studio.stilip.geek.domain.entities.UserWithScore
 
-class MemberScoreVisitorAdapter :
-    ListAdapter<Score, MemberScoreVisitorViewHolder>(ScoreDiffCallback) {
+class UserWithScoreAdapter(
+    private val onItemClicked: (UserWithScore) -> Unit,
+) : ListAdapter<UserWithScore, UserWithScoreViewHolder>(UserWithScoreDiffCallback) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
-        MemberScoreVisitorViewHolder(
+        UserWithScoreViewHolder(
             CardMemberScoreVisitorBinding.inflate(
                 LayoutInflater.from(parent.context),
                 parent,
                 false
             ),
+            onItemClicked,
         )
 
-    override fun onBindViewHolder(holder: MemberScoreVisitorViewHolder, position: Int) =
+    override fun onBindViewHolder(holder: UserWithScoreViewHolder, position: Int) =
         holder.bind(getItem(position))
 
 }

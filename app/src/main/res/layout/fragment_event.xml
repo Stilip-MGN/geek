@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".app.events.EventsFragment">
+    tools:context=".app.events.event.EventFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -128,7 +128,6 @@
             app:layout_constraintTop_toBottomOf="@id/date_title"
             tools:text="@tools:sample/date/hhmm" />
 
-
         <Button
             android:id="@+id/btn_sub"
             android:layout_width="0dp"
@@ -197,8 +196,31 @@
             tools:itemCount="2"
             tools:listitem="@layout/card_member" />
 
-        <Button
+        <Spinner
+            android:id="@+id/sp_rounds"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="15dp"
+            android:layout_marginTop="10dp"
+            android:spinnerMode="dropdown"
+            app:layout_constraintEnd_toStartOf="@id/btn_add_round"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/rec_members"
+            tools:listitem="@layout/spinner_round" />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/btn_add_round"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="15dp"
+            android:src="@drawable/ic_add_24"
+            app:fabSize="mini"
+            app:layout_constraintBottom_toBottomOf="@id/sp_rounds"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/sp_rounds" />
+
+        <Button
+            android:id="@+id/btn_add_set"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="15dp"
@@ -206,10 +228,10 @@
             android:text="@string/add_round"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/rec_members" />
+            app:layout_constraintTop_toBottomOf="@id/sp_rounds" />
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rec_rounds"
+            android:id="@+id/rec_sets"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="20dp"
@@ -219,9 +241,9 @@
             app:layout_constrainedHeight="true"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/btn_add_round"
+            app:layout_constraintTop_toBottomOf="@id/btn_add_set"
             tools:itemCount="2"
-            tools:listitem="@layout/card_round" />
+            tools:listitem="@layout/card_round_visitor" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.core.widget.NestedScrollView>

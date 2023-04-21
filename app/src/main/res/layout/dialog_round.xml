@@ -2,7 +2,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="280dp"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_gravity="center">
 
@@ -27,7 +27,7 @@
         android:maxLines="1"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/title" />
+        app:layout_constraintTop_toBottomOf="@id/title" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btn_cancel"
@@ -39,8 +39,8 @@
         android:layout_marginBottom="8dp"
         android:text="@string/cancel"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/btn_save"
-        app:layout_constraintTop_toBottomOf="@+id/edit_title" />
+        app:layout_constraintEnd_toStartOf="@id/btn_save"
+        app:layout_constraintTop_toBottomOf="@id/edit_title" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btn_save"
@@ -48,7 +48,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="36dp"
-        android:layout_marginEnd="8dp"
+        android:layout_marginEnd="15dp"
         android:layout_marginBottom="8dp"
         android:text="@string/btn_create"
         android:textAllCaps="true"

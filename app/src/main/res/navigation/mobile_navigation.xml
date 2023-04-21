@@ -128,6 +128,12 @@
         <action
             android:id="@+id/action_navigation_event_to_event_chat"
             app:destination="@id/navigation_event_chat" />
+        <action
+            android:id="@+id/action_navigation_event_to_set_edit"
+            app:destination="@id/navigation_set_edit" />
+        <action
+            android:id="@+id/action_navigation_event_to_set_create"
+            app:destination="@id/navigation_set_create" />
     </fragment>
 
     <fragment
@@ -195,5 +201,27 @@
         android:id="@+id/navigation_event_chat"
         android:name="studio.stilip.geek.app.events.chat.EventChatFragment"
         tools:layout="@layout/fragment_event_chat" />
+
+    <fragment
+        android:id="@+id/navigation_set_edit"
+        android:name="studio.stilip.geek.app.events.set.edit.SetEditFragment"
+        tools:layout="@layout/fragment_set_edit">
+        <action
+            android:id="@+id/action_navigation_set_edit_to_event"
+            app:destination="@id/navigation_event"
+            app:popUpTo="@id/navigation_event"
+            app:popUpToInclusive="true" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_set_create"
+        android:name="studio.stilip.geek.app.events.set.create.SetCreateFragment"
+        tools:layout="@layout/fragment_set_edit">
+        <action
+            android:id="@+id/action_navigation_set_create_to_event"
+            app:destination="@id/navigation_event"
+            app:popUpTo="@id/navigation_event"
+            app:popUpToInclusive="true" />
+    </fragment>
 
 </navigation>

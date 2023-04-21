@@ -22,17 +22,17 @@ class EventViewModel @Inject constructor(
     private val getUserById: GetUserByIdUseCase,
     private val subscribeToEvent: SubscribeToEventUseCase,
     private val unsubscribeFromEvent: UnsubscribeFromEventUseCase,
-    private val replaceMemberInScore: ReplaceMemberInScoreUseCase,
-    private val replaceScoreInScore: ReplaceScoreInScoreUseCase,
     private val getRoundsByEventId: GetRoundsByEventIdUseCase,
-    private val addMemberInRound: AddMemberInRoundUseCase,
-    private val createRound: CreateRoundUseCase,
-    private val deleteRound: DeleteRoundUseCase,
+    private val getMembersScoresBySetId: GetMembersScoresBySetIdUseCase,
+    private val getMemberScoreById: GetMemberScoreByIdUseCase,
+    private val getSetById: GetSetByIdUseCase,
+    private val createRound: CreateRoundNewUseCase,
     stateHandle: SavedStateHandle
 ) : ViewModel() {
 
     val userId = UserCacheManager.getUserId()
     val eventId: String = stateHandle[EVENT_ID]!!
+    val currentRound = MutableStateFlow(Round())
 
     private val _membersId = getMembersByEventId(eventId)
         .stateIn(viewModelScope, SharingStarted.Eagerly, emptyList())
@@ -51,6 +51,34 @@ class EventViewModel @Inject constructor(
     val rounds = getRoundsByEventId(eventId)
         .stateIn(viewModelScope, SharingStarted.Eagerly, emptyList())
 
+    val sets = currentRound.flatMapLatest { current ->
+        flow {
+            if (current == Round())
+                return@flow
+            val sets = current.setsIds.map { id -> getSetById(id).first() }
+
+            val list = sets.map { set ->
+                val ids = getMembersScoresBySetId(set.id).first()
+                val listMS = ids.map { id ->
+                    getMemberScoreById(id).first()
+                }
+                val usersWithScore = listMS.map { memberScore ->
+                    UserWithScore(
+                        memberScore.id,
+                        getUserById(memberScore.memberId).first(),
+                        memberScore.score
+                    )
+                }
+                SetWithList(
+                    id = set.id,
+                    title = set.title,
+                    membersScores = usersWithScore
+                )
+            }
+            emit(list)
+        }
+    }.stateIn(viewModelScope, SharingStarted.Eagerly, emptyList())
+
     fun onSubscribeClick() {
         viewModelScope.launch {
             subscribeToEvent(userId, eventId)
@@ -63,34 +91,17 @@ class EventViewModel @Inject constructor(
         }
     }
 
-    fun onMemberChanged(roundId: String, scoreId: String, memberId: String) {
+    fun onRoundChanged(round: Round) {
+        if (round == currentRound.value)
+            currentRound.value = Round()
         viewModelScope.launch {
-            replaceMemberInScore(eventId, roundId, scoreId, memberId)
+            currentRound.value = round
         }
     }
 
-    fun onScoreChanged(roundId: String, scoreId: String, score: Int) {
+    fun onCreateClicked(title: String) {
         viewModelScope.launch {
-            replaceScoreInScore(eventId, roundId, scoreId, score)
+            createRound(title, eventId)
         }
     }
-
-    fun onAddMemberClicked(roundId: String) {
-        viewModelScope.launch {
-            addMemberInRound(eventId, roundId)
-        }
-    }
-
-    fun onAddRoundClicked(title: String) {
-        viewModelScope.launch {
-            createRound(eventId, title)
-        }
-    }
-
-    fun onDeleteClicked(roundId: String) {
-        viewModelScope.launch {
-            deleteRound(eventId, roundId)
-        }
-    }
-
 }

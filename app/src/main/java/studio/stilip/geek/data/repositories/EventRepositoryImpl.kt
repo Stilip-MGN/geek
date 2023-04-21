@@ -10,10 +10,8 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
-import studio.stilip.geek.domain.entities.Event
-import studio.stilip.geek.domain.entities.Round
-import studio.stilip.geek.domain.entities.Score
-import studio.stilip.geek.domain.entities.User
+import studio.stilip.geek.domain.entities.*
+import studio.stilip.geek.domain.entities.Set
 import studio.stilip.geek.domain.repository_interface.EventRepository
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -122,93 +120,192 @@ class EventRepositoryImpl @Inject constructor(
             .await()
     }
 
-    override suspend fun replaceMemberInScore(
-        eventId: String,
-        roundId: String,
-        scoreId: String,
-        userId: String
-    ) {
-        database
-            .child("Events")
-            .child(eventId)
-            .child("Rounds")
-            .child(roundId)
-            .child("Scores")
-            .child(scoreId).updateChildren(
-                mapOf("memberId" to userId)
-            ).await()
+    override fun getSetById(id: String): Flow<Set> = callbackFlow {
+        val set = database.child("Sets").child(id)
+        val listener = set.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                launch {
+                    snapshot.getValue(Set::class.java)?.let { send(it) }
+                }
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                cancel("Unable take set", error.toException())
+            }
+
+        })
+        awaitClose { set.removeEventListener(listener) }
     }
 
-    override suspend fun replaceScoreInScore(
-        eventId: String,
-        roundId: String,
-        scoreId: String,
-        score: Int
-    ) {
-        database
-            .child("Events")
-            .child(eventId)
-            .child("Rounds")
-            .child(roundId)
-            .child("Scores")
-            .child(scoreId).updateChildren(
-                mapOf("score" to score)
-            ).await()
+    override fun getMembersScoresBySetId(id: String): Flow<List<String>> = callbackFlow {
+        val membersScores = database.child("Sets").child(id).child("MemberScore")
+        val listener = membersScores.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                launch {
+                    send(snapshot.children.mapNotNull { it.key })
+                }
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                cancel("Unable take membersScores", error.toException())
+            }
+
+        })
+        awaitClose { membersScores.removeEventListener(listener) }
     }
 
-    override fun getRoundsByEventId(eventId: String): Flow<List<Round>> =
-        callbackFlow {
-            val rounds = database.child("Events").child(eventId).child("Rounds")
-            val listener = rounds.addValueEventListener(object : ValueEventListener {
-                override fun onDataChange(snapshot: DataSnapshot) {
-                    launch {
-                        send(snapshot.children.mapNotNull {
-                            val r = it.getValue(Round::class.java)
-
-                            val s = snapshot.child(r!!.id)
-                                .child("Scores").children.mapNotNull { ds ->
-                                    ds.getValue(Score::class.java)
-                                }
-                            r.copy(scores = s)
-                        })
-                    }
+    override fun getMemberScoreById(id: String): Flow<MemberScore> = callbackFlow {
+        val memberScore = database.child("MemberScore").child(id)
+        val listener = memberScore.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                launch {
+                    snapshot.getValue(MemberScore::class.java)?.let { send(it) }
                 }
+            }
 
-                override fun onCancelled(error: DatabaseError) {
-                    cancel("Unable take rounds", error.toException())
-                }
+            override fun onCancelled(error: DatabaseError) {
+                cancel("Unable take MemberScore", error.toException())
+            }
 
-            })
-            awaitClose { rounds.removeEventListener(listener) }
+        })
+        awaitClose { memberScore.removeEventListener(listener) }
+    }
+
+    override suspend fun updateSet(
+        set: Set,
+        membersScoresDeleted: List<MemberScore>,
+        eventId: String
+    ) {
+        val refSet = database.child("Sets").child(set.id)
+        refSet.updateChildren(
+            mapOf(
+                "title" to set.title,
+            )
+        ).await()
+        val refMS = database.child("MemberScore")
+        val refSetMS = database.child("Sets")
+            .child(set.id)
+            .child("MemberScore")
+
+        set.membersScores.forEach { ms ->
+            refMS.child(ms.id).updateChildren(
+                mapOf(
+                    "id" to ms.id,
+                    "memberId" to ms.memberId,
+                    "score" to ms.score
+                )
+            ).await()
+            refSetMS.child(ms.id).updateChildren(
+                mapOf("id" to ms.id)
+            ).await()
         }
 
-    override suspend fun createScoreByRoundId(eventId: String, roundId: String) {
-        val ref = database
-            .child("Events")
-            .child(eventId)
-            .child("Rounds")
-            .child(roundId)
-            .child("Scores")
-            .push()
-        ref.setValue(Score(id = ref.key!!)).await()
+        membersScoresDeleted.forEach { ms ->
+            refMS.child(ms.id).removeValue().await()
+            refSetMS.child(ms.id).removeValue().await()
+        }
+
+        database.child("RoundsInfo")
+            .child(eventId).child(eventId).updateChildren(mapOf("id" to "null_name")).await()
+        database.child("RoundsInfo")
+            .child(eventId).child(eventId).removeValue().await()
+
     }
 
-    override suspend fun createRound(eventId: String, title: String) {
-        val ref = database
-            .child("Events")
-            .child(eventId)
-            .child("Rounds")
-            .push()
-        ref.setValue(Round(id = ref.key!!, title = title)).await()
+    override fun getRoundsByEventId(eventId: String): Flow<List<Round>> = callbackFlow {
+        val rounds = database.child("RoundsInfo").child(eventId)
+        val listener = rounds.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                launch {
+                    send(snapshot.children.mapNotNull {
+                        val round = it.getValue(Round::class.java)
+
+                        val setsIds = snapshot.child(round!!.id)
+                            .child("Sets").children.mapNotNull { ds ->
+                                ds.key
+                            }
+                        round.copy(setsIds = setsIds)
+                    })
+                }
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                cancel("Unable take rounds", error.toException())
+            }
+
+        })
+        awaitClose { rounds.removeEventListener(listener) }
     }
 
-    override suspend fun deleteRound(eventId: String, roundId: String) {
-        database
-            .child("Events")
+    override suspend fun createSet(
+        title: String,
+        membersScores: List<MemberScore>,
+        eventId: String,
+        roundId: String
+    ) {
+        val refSet = database.child("Sets").push()
+        refSet.updateChildren(
+            mapOf(
+                "id" to refSet.key,
+                "title" to title,
+            )
+        )
+        val refRoundSets = database.child("RoundsInfo")
+            .child(eventId).child(roundId).child("Sets")
+
+        refRoundSets.child(refSet.key!!).updateChildren(
+            mapOf("id" to refSet.key)
+        )
+
+        val refMS = database.child("MemberScore")
+        val refMembersScores = database.child("Sets")
+            .child(refSet.key!!)
+            .child("MemberScore")
+
+        membersScores.forEach { ms ->
+            refMS.child(ms.id).setValue(ms)
+            refMembersScores.child(ms.id).updateChildren(
+                mapOf("id" to ms.id)
+            )
+        }
+
+        database.child("RoundsInfo")
+            .child(eventId).child(eventId).updateChildren(mapOf("id" to "null_name")).await()
+        database.child("RoundsInfo")
+            .child(eventId).child(eventId).removeValue().await()
+    }
+
+    override suspend fun createRoundNew(title: String, eventId: String) {
+        val refRoundSets = database.child("RoundsInfo")
+            .child(eventId).push()
+
+        refRoundSets.updateChildren(
+            mapOf(
+                "id" to refRoundSets.key,
+                "title" to title
+            )
+        ).await()
+    }
+
+    override suspend fun deleteSet(set: Set, eventId: String, roundId: String) {
+        database.child("RoundsInfo")
             .child(eventId)
-            .child("Rounds")
             .child(roundId)
+            .child("Sets")
+            .child(set.id)
             .removeValue()
-            .await()
+
+        database.child("Sets").child(set.id).removeValue()
+
+        val refMS = database.child("MemberScore")
+        set.membersScores.forEach { ms ->
+            refMS.child(ms.id).removeValue()
+        }
+
+        database.child("RoundsInfo")
+            .child(eventId).child(eventId).updateChildren(mapOf("id" to "null_name")).await()
+        database.child("RoundsInfo")
+            .child(eventId).child(eventId).removeValue().await()
+
     }
 }

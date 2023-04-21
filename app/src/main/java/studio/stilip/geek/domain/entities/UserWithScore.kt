@@ -1,8 +1,7 @@
 package studio.stilip.geek.domain.entities
 
-data class Score(
+data class UserWithScore(
     val id: String = "",
-    val memberId: String = "",
+    val user: User = User(),
     val score: Int = 0,
-    val members: List<User> = emptyList()
 )

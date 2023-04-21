@@ -45,8 +45,8 @@
     <string name="add_player">Добавить игрока</string>
     <string name="select_player">Выберите игрока</string>
     <string name="add_round">Добавить партию</string>
-    <string name="create_round">Создание партии</string>
-    <string name="write_title_round">Введите название партии</string>
+    <string name="create_round">Создание раунд</string>
+    <string name="write_title_round">Введите название раунда</string>
     <string name="cancel">Закрыть</string>
     <string name="accept">Подтвердить</string>
     <string name="btn_create">Создать</string>
@@ -61,4 +61,7 @@
     <string name="i_not_member">Я - Не участник</string>
     <string name="actual">Актуальные</string>
     <string name="not_actual">Неактуальные</string>
+    <string name="delete">Удалить</string>
+    <string name="name_or_description_for_set">Название или описание для партии</string>
+    <string name="enter_player_score">Укажите игрока и счёт</string>
 </resources>

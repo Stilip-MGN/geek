@@ -1,7 +1,7 @@
 package studio.stilip.geek.domain.entities
 
-data class Round(
+data class SetWithList(
     val id: String = "",
     val title: String = "",
-    val setsIds: List<String> = emptyList()
+    val membersScores: List<UserWithScore> = emptyList()
 )

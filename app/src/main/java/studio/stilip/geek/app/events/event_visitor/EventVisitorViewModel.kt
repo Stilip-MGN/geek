@@ -23,11 +23,15 @@ class EventVisitorViewModel @Inject constructor(
     private val subscribeToEvent: SubscribeToEventUseCase,
     private val unsubscribeFromEvent: UnsubscribeFromEventUseCase,
     private val getRoundsByEventId: GetRoundsByEventIdUseCase,
+    private val getMembersScoresBySetId: GetMembersScoresBySetIdUseCase,
+    private val getMemberScoreById: GetMemberScoreByIdUseCase,
+    private val getSetById: GetSetByIdUseCase,
     stateHandle: SavedStateHandle
 ) : ViewModel() {
 
     val userId = UserCacheManager.getUserId()
     val eventId: String = stateHandle[EVENT_ID]!!
+    private val currentRound = MutableStateFlow(Round())
 
     private val _membersId = getMembersByEventId(eventId)
         .stateIn(viewModelScope, SharingStarted.Eagerly, emptyList())
@@ -46,6 +50,34 @@ class EventVisitorViewModel @Inject constructor(
     val rounds = getRoundsByEventId(eventId)
         .stateIn(viewModelScope, SharingStarted.Eagerly, emptyList())
 
+    val sets = currentRound.flatMapLatest { current ->
+        flow {
+            if (current == Round())
+                return@flow
+            val sets = current.setsIds.map { id -> getSetById(id).first() }
+
+            val list = sets.map { set ->
+                val ids = getMembersScoresBySetId(set.id).first()
+                val listMS = ids.map { id ->
+                    getMemberScoreById(id).first()
+                }
+                val usersWithScore = listMS.map { memberScore ->
+                    UserWithScore(
+                        memberScore.id,
+                        getUserById(memberScore.memberId).first(),
+                        memberScore.score
+                    )
+                }
+                SetWithList(
+                    id = set.id,
+                    title = set.title,
+                    membersScores = usersWithScore
+                )
+            }
+            emit(list)
+        }
+    }.stateIn(viewModelScope, SharingStarted.Eagerly, emptyList())
+
     fun onSubscribeClick() {
         viewModelScope.launch {
             subscribeToEvent(userId, eventId)
@@ -55,6 +87,14 @@ class EventVisitorViewModel @Inject constructor(
     fun onUnsubscribeClick() {
         viewModelScope.launch {
             unsubscribeFromEvent(userId, eventId)
+        }
+    }
+
+    fun onRoundChanged(round: Round) {
+        if (round == currentRound.value)
+            currentRound.value = Round()
+        viewModelScope.launch {
+            currentRound.value = round
         }
     }
 }

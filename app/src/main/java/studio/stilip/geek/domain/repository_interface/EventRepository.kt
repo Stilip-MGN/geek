@@ -1,8 +1,8 @@
 package studio.stilip.geek.domain.repository_interface
 
 import kotlinx.coroutines.flow.Flow
-import studio.stilip.geek.domain.entities.Event
-import studio.stilip.geek.domain.entities.Round
+import studio.stilip.geek.domain.entities.*
+import studio.stilip.geek.domain.entities.Set
 
 interface EventRepository {
 
@@ -22,25 +22,24 @@ interface EventRepository {
 
     suspend fun unsubscribeFromEvent(userId: String, eventId: String)
 
-    suspend fun replaceMemberInScore(
-        eventId: String,
-        roundId: String,
-        scoreId: String,
-        userId: String
-    )
+    fun getSetById(id: String): Flow<Set>
 
-    suspend fun replaceScoreInScore(
-        eventId: String,
-        roundId: String,
-        scoreId: String,
-        score: Int
-    )
+    fun getMembersScoresBySetId(id: String): Flow<List<String>>
+
+    fun getMemberScoreById(id: String): Flow<MemberScore>
+
+    suspend fun updateSet(set: Set, membersScoresDeleted: List<MemberScore>, eventId: String)
 
     fun getRoundsByEventId(eventId: String): Flow<List<Round>>
 
-    suspend fun createScoreByRoundId(eventId: String, roundId: String)
+    suspend fun createSet(
+        title: String,
+        membersScores: List<MemberScore>,
+        eventId: String,
+        roundId: String
+    )
 
-    suspend fun createRound(eventId: String, title: String)
+    suspend fun createRoundNew(title: String, eventId: String)
 
-    suspend fun deleteRound(eventId: String, roundId: String)
+    suspend fun deleteSet(set: Set, eventId: String, roundId: String)
 }

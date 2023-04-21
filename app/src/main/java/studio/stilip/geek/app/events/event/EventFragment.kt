@@ -6,6 +6,7 @@ import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
+import android.widget.AdapterView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
@@ -17,14 +18,13 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
 import studio.stilip.geek.R
 import studio.stilip.geek.app.HostViewModel
-import studio.stilip.geek.app.events.event.round.RoundAdapter
+import studio.stilip.geek.app.events.set.SetAdapter
 import studio.stilip.geek.app.games.gameinfo.GameInfoFragment.Companion.GAME_ID
 import studio.stilip.geek.databinding.FragmentEventBinding
+import studio.stilip.geek.domain.entities.Round
 
 @AndroidEntryPoint
 class EventFragment : Fragment(R.layout.fragment_event) {
@@ -81,21 +81,27 @@ class EventFragment : Fragment(R.layout.fragment_event) {
         val adapter = MemberAdapter {
             //TODO Страница пользователей
         }
-        var countMembers = 0
 
-        val roundAdapter = RoundAdapter({ round, score ->
-            viewModel.onMemberChanged(round.id, score.id, score.memberId)
-        }, { round, score ->
-            viewModel.onScoreChanged(round.id, score.id, score.score)
-        }, { round ->
-            viewModel.onAddMemberClicked(round.id)
-        }, { round ->
-            viewModel.onDeleteClicked(round.id)
-        })
+        val roundAdapter = RoundSpinnerAdapter(this.requireContext())
+        val setAdapter = SetAdapter { id ->
+            val arg = Bundle().apply {
+                putString(EVENT_ID, viewModel.eventId)
+                putString(ROUND_ID, viewModel.currentRound.value.id)
+                putString(SET_ID, id)
+            }
+            findNavController().navigate(
+                R.id.action_navigation_event_to_set_edit,
+                arg
+            )
+        }
+        var countMembers = 0
+        var isUserSubscribed = false
+        var isCanChangeMemberStatus = false
 
         with(binding) {
             recMembers.adapter = adapter
-            recRounds.adapter = roundAdapter
+            recSets.adapter = setAdapter
+            spRounds.adapter = roundAdapter
 
             btnUnsub.setOnClickListener {
                 viewModel.onUnsubscribeClick()
@@ -103,39 +109,75 @@ class EventFragment : Fragment(R.layout.fragment_event) {
             btnSub.setOnClickListener {
                 viewModel.onSubscribeClick()
             }
+            btnAddSet.setOnClickListener {
+                val arg = Bundle().apply {
+                    putString(EVENT_ID, viewModel.eventId)
+                    putString(ROUND_ID, viewModel.currentRound.value.id)
+                }
+                findNavController().navigate(
+                    R.id.action_navigation_event_to_set_create,
+                    arg
+                )
+            }
+
             btnAddRound.setOnClickListener {
                 RoundDialog { title ->
-                    viewModel.onAddRoundClicked(title)
+                    viewModel.onCreateClicked(title)
                 }.show(parentFragmentManager, "dialog")
+            }
+
+            spRounds.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+                override fun onNothingSelected(parent: AdapterView<*>?) {}
+
+                override fun onItemSelected(
+                    parent: AdapterView<*>?,
+                    view: View?,
+                    position: Int,
+                    id: Long
+                ) {
+                    viewModel.onRoundChanged(spRounds.selectedItem as Round)
+                }
+            }
+        }
+
+        fun updateUI() {
+            with(binding) {
+                if (isCanChangeMemberStatus) {
+                    btnAddSet.visibility = View.GONE
+                    if (isUserSubscribed) {
+                        btnSub.visibility = View.GONE
+                        btnUnsub.visibility = View.VISIBLE
+                    } else {
+                        btnSub.visibility = View.VISIBLE
+                        btnUnsub.visibility = View.GONE
+                    }
+                } else {
+                    btnSub.visibility = View.GONE
+                    btnUnsub.visibility = View.GONE
+                    btnAddSet.visibility = View.VISIBLE
+                }
             }
         }
 
         viewLifecycleOwner.lifecycleScope.launch {
             viewModel.rounds
-                .combine(viewModel.members) { rounds, members ->
-                    rounds to members
-                }
                 .flowWithLifecycle(viewLifecycleOwner.lifecycle)
-                .collectLatest { (rounds, members) ->
-                    with(binding) {
-                        if (rounds.isNotEmpty()) {
-                            btnSub.visibility = View.GONE
-                            btnUnsub.visibility = View.GONE
-                        } else {
-                            if (members.firstOrNull { member -> member.id == viewModel.userId } != null) {
-                                btnSub.visibility = View.GONE
-                                btnUnsub.visibility = View.VISIBLE
-                            } else {
-                                btnUnsub.visibility = View.GONE
-                                btnSub.visibility = View.VISIBLE
-                            }
-                        }
-                    }
-                    roundAdapter.submitList(rounds.map { r ->
-                        r.copy(scores = r.scores.map { s ->
-                            s.copy(members = members)
-                        })
-                    })
+                .collect { rounds ->
+                    isCanChangeMemberStatus = rounds.isEmpty()
+                    updateUI()
+                    roundAdapter.clear()
+                    roundAdapter.addAll(rounds)
+
+                    if (rounds.isNotEmpty())
+                        binding.spRounds.setSelection(rounds.size - 1)
+                }
+        }
+
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewModel.sets
+                .flowWithLifecycle(viewLifecycleOwner.lifecycle)
+                .collect { sets ->
+                    setAdapter.submitList(sets)
                 }
         }
 
@@ -158,11 +200,11 @@ class EventFragment : Fragment(R.layout.fragment_event) {
             viewModel.members
                 .flowWithLifecycle(viewLifecycleOwner.lifecycle)
                 .collect { members ->
+                    isUserSubscribed = members.any { user -> user.id == viewModel.userId }
+                    updateUI()
                     adapter.submitList(members)
                     with(binding) {
                         membersCount.text = "${members.count()}/${countMembers}"
-
-
                     }
                 }
         }
@@ -203,5 +245,7 @@ class EventFragment : Fragment(R.layout.fragment_event) {
 
     companion object {
         const val EVENT_ID = "event_id"
+        const val ROUND_ID = "round_id"
+        const val SET_ID = "set_id"
     }
 }
