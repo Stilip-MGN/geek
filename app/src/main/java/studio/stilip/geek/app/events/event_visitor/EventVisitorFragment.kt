@@ -23,11 +23,11 @@ import studio.stilip.geek.R
 import studio.stilip.geek.app.HostViewModel
 import studio.stilip.geek.app.events.event.EventFragment
 import studio.stilip.geek.app.events.event.MemberAdapter
-import studio.stilip.geek.app.events.event.round.RoundSpinnerAdapter
+import studio.stilip.geek.app.events.event.RoundSpinnerAdapter
 import studio.stilip.geek.app.events.set.SetAdapter
 import studio.stilip.geek.app.games.gameinfo.GameInfoFragment
 import studio.stilip.geek.databinding.FragmentEventVisitorBinding
-import studio.stilip.geek.domain.entities.RoundNew
+import studio.stilip.geek.domain.entities.Round
 
 @AndroidEntryPoint
 class EventVisitorFragment : Fragment(R.layout.fragment_event_visitor) {
@@ -102,7 +102,7 @@ class EventVisitorFragment : Fragment(R.layout.fragment_event_visitor) {
                     position: Int,
                     id: Long
                 ) {
-                    viewModel.onRoundChanged(spRounds.selectedItem as RoundNew)
+                    viewModel.onRoundChanged(spRounds.selectedItem as Round)
                 }
             }
         }

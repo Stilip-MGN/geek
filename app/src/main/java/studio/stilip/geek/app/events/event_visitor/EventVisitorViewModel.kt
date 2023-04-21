@@ -22,7 +22,7 @@ class EventVisitorViewModel @Inject constructor(
     private val getUserById: GetUserByIdUseCase,
     private val subscribeToEvent: SubscribeToEventUseCase,
     private val unsubscribeFromEvent: UnsubscribeFromEventUseCase,
-    private val getRoundsByEventId: GetRoundsByEventId2UseCase,
+    private val getRoundsByEventId: GetRoundsByEventIdUseCase,
     private val getMembersScoresBySetId: GetMembersScoresBySetIdUseCase,
     private val getMemberScoreById: GetMemberScoreByIdUseCase,
     private val getSetById: GetSetByIdUseCase,
@@ -31,7 +31,7 @@ class EventVisitorViewModel @Inject constructor(
 
     val userId = UserCacheManager.getUserId()
     val eventId: String = stateHandle[EVENT_ID]!!
-    private val currentRound = MutableStateFlow(RoundNew())
+    private val currentRound = MutableStateFlow(Round())
 
     private val _membersId = getMembersByEventId(eventId)
         .stateIn(viewModelScope, SharingStarted.Eagerly, emptyList())
@@ -52,7 +52,7 @@ class EventVisitorViewModel @Inject constructor(
 
     val sets = currentRound.flatMapLatest { current ->
         flow {
-            if (current == RoundNew())
+            if (current == Round())
                 return@flow
             val sets = current.setsIds.map { id -> getSetById(id).first() }
 
@@ -90,9 +90,9 @@ class EventVisitorViewModel @Inject constructor(
         }
     }
 
-    fun onRoundChanged(round: RoundNew) {
+    fun onRoundChanged(round: Round) {
         if (round == currentRound.value)
-            currentRound.value = RoundNew()
+            currentRound.value = Round()
         viewModelScope.launch {
             currentRound.value = round
         }

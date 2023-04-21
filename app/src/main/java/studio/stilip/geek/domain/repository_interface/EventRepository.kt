@@ -22,28 +22,6 @@ interface EventRepository {
 
     suspend fun unsubscribeFromEvent(userId: String, eventId: String)
 
-    suspend fun replaceMemberInScore(
-        eventId: String,
-        roundId: String,
-        scoreId: String,
-        userId: String
-    )
-
-    suspend fun replaceScoreInScore(
-        eventId: String,
-        roundId: String,
-        scoreId: String,
-        score: Int
-    )
-
-    fun getRoundsByEventId(eventId: String): Flow<List<Round>>
-
-    suspend fun createScoreByRoundId(eventId: String, roundId: String)
-
-    suspend fun createRound(eventId: String, title: String)
-
-    suspend fun deleteRound(eventId: String, roundId: String)
-
     fun getSetById(id: String): Flow<Set>
 
     fun getMembersScoresBySetId(id: String): Flow<List<String>>
@@ -52,7 +30,7 @@ interface EventRepository {
 
     suspend fun updateSet(set: Set, eventId: String)
 
-    fun getRoundsByEventId2(eventId: String): Flow<List<RoundNew>>
+    fun getRoundsByEventId(eventId: String): Flow<List<Round>>
 
     suspend fun createSet(
         title: String,

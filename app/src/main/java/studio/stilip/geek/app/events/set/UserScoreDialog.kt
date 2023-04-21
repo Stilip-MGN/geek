@@ -5,7 +5,7 @@ import android.app.Dialog
 import android.os.Bundle
 import android.view.LayoutInflater
 import androidx.fragment.app.DialogFragment
-import studio.stilip.geek.app.events.event.round.score.PlayerSpinnerAdapter
+import studio.stilip.geek.app.events.event.PlayerSpinnerAdapter
 import studio.stilip.geek.databinding.DialogUserScoreBinding
 import studio.stilip.geek.domain.entities.User
 import studio.stilip.geek.domain.entities.UserWithScore

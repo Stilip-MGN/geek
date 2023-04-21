@@ -21,11 +21,10 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import studio.stilip.geek.R
 import studio.stilip.geek.app.HostViewModel
-import studio.stilip.geek.app.events.event.round.RoundSpinnerAdapter
 import studio.stilip.geek.app.events.set.SetAdapter
 import studio.stilip.geek.app.games.gameinfo.GameInfoFragment.Companion.GAME_ID
 import studio.stilip.geek.databinding.FragmentEventBinding
-import studio.stilip.geek.domain.entities.RoundNew
+import studio.stilip.geek.domain.entities.Round
 
 @AndroidEntryPoint
 class EventFragment : Fragment(R.layout.fragment_event) {
@@ -136,7 +135,7 @@ class EventFragment : Fragment(R.layout.fragment_event) {
                     position: Int,
                     id: Long
                 ) {
-                    viewModel.onRoundChanged(spRounds.selectedItem as RoundNew)
+                    viewModel.onRoundChanged(spRounds.selectedItem as Round)
                 }
             }
         }
