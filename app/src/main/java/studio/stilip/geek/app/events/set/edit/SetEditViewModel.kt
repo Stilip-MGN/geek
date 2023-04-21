@@ -82,9 +82,7 @@ class SetEditViewModel @Inject constructor(
 
     fun onDialogDeleted(us: UserWithScore) {
         membersScores.value = membersScores.value.minus(us)
-        println(membersScoresDeleted.size)
         membersScoresDeleted.add(us)
-        println(membersScoresDeleted.size)
     }
 
     fun onAddButtonClicked() {
@@ -100,7 +98,6 @@ class SetEditViewModel @Inject constructor(
                 _setTitle.value,
                 membersScores.value.map { x -> MemberScore(x.id, x.user.id, x.score) }
             )
-            membersScoresDeleted.forEach { x -> println(x.id) }
             updateSet(
                 result,
                 membersScoresDeleted.map { x -> MemberScore(x.id, x.user.id, x.score) },
