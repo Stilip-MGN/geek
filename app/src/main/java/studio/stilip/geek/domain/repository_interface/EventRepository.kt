@@ -28,7 +28,7 @@ interface EventRepository {
 
     fun getMemberScoreById(id: String): Flow<MemberScore>
 
-    suspend fun updateSet(set: Set, eventId: String)
+    suspend fun updateSet(set: Set, membersScoresDeleted: List<MemberScore>, eventId: String)
 
     fun getRoundsByEventId(eventId: String): Flow<List<Round>>
 

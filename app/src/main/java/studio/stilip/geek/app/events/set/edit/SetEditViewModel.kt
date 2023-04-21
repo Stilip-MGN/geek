@@ -31,6 +31,7 @@ class SetEditViewModel @Inject constructor(
     val membersScores = MutableStateFlow(emptyList<UserWithScore>())
     val setUpdatedOrDeleted = MutableStateFlow<Boolean?>(null)
     private val _setTitle = MutableStateFlow("")
+    private val membersScoresDeleted = arrayListOf<UserWithScore>()
 
     val eventId: String = stateHandle[EVENT_ID]!!
     private val roundId: String = stateHandle[ROUND_ID]!!
@@ -74,20 +75,22 @@ class SetEditViewModel @Inject constructor(
     }
 
     fun onDialogSavedChanges(userWithScore: UserWithScore) {
-        membersScores.value =
-            membersScores.value.map { us -> if (userWithScore.id == us.id) userWithScore else us }
+        membersScores.value = membersScores.value.map { us ->
+            if (userWithScore.id == us.id) userWithScore else us
+        }
     }
 
     fun onDialogDeleted(us: UserWithScore) {
-        membersScores.value =
-            membersScores.value.minus(us)
+        membersScores.value = membersScores.value.minus(us)
+        println(membersScoresDeleted.size)
+        membersScoresDeleted.add(us)
+        println(membersScoresDeleted.size)
     }
 
     fun onAddButtonClicked() {
         val user = members.value.first()
         val id = System.currentTimeMillis().toString()
-        membersScores.value =
-            membersScores.value.plus(UserWithScore(id, user))
+        membersScores.value = membersScores.value.plus(UserWithScore(id, user))
     }
 
     fun onCompleteClicked() {
@@ -97,7 +100,12 @@ class SetEditViewModel @Inject constructor(
                 _setTitle.value,
                 membersScores.value.map { x -> MemberScore(x.id, x.user.id, x.score) }
             )
-            updateSet(result, eventId)
+            membersScoresDeleted.forEach { x -> println(x.id) }
+            updateSet(
+                result,
+                membersScoresDeleted.map { x -> MemberScore(x.id, x.user.id, x.score) },
+                eventId
+            )
             setUpdatedOrDeleted.value = true
         }
     }

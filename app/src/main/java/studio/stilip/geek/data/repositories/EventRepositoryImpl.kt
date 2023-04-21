@@ -171,7 +171,11 @@ class EventRepositoryImpl @Inject constructor(
         awaitClose { memberScore.removeEventListener(listener) }
     }
 
-    override suspend fun updateSet(set: Set, eventId: String) {
+    override suspend fun updateSet(
+        set: Set,
+        membersScoresDeleted: List<MemberScore>,
+        eventId: String
+    ) {
         val refSet = database.child("Sets").child(set.id)
         refSet.updateChildren(
             mapOf(
@@ -179,11 +183,10 @@ class EventRepositoryImpl @Inject constructor(
             )
         ).await()
         val refMS = database.child("MemberScore")
-        val membersScores = database.child("Sets")
+        val refSetMS = database.child("Sets")
             .child(set.id)
             .child("MemberScore")
 
-        membersScores.removeValue()
         set.membersScores.forEach { ms ->
             refMS.child(ms.id).updateChildren(
                 mapOf(
@@ -192,9 +195,14 @@ class EventRepositoryImpl @Inject constructor(
                     "score" to ms.score
                 )
             ).await()
-            membersScores.child(ms.id).updateChildren(
+            refSetMS.child(ms.id).updateChildren(
                 mapOf("id" to ms.id)
             ).await()
+        }
+
+        membersScoresDeleted.forEach { ms ->
+            refMS.child(ms.id).removeValue().await()
+            refSetMS.child(ms.id).removeValue().await()
         }
 
         database.child("RoundsInfo")

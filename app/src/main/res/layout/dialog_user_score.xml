@@ -12,7 +12,7 @@
         android:layout_height="64dp"
         android:gravity="center_vertical"
         android:paddingHorizontal="24dp"
-        android:text="@string/create_round"
+        android:text="@string/enter_player_score"
         android:textAppearance="?textAppearanceBody1"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
