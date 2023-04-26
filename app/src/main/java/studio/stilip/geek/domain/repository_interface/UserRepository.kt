@@ -19,4 +19,5 @@ interface UserRepository {
 
     fun getUserById(id: String): Flow<User>
 
+    suspend fun updateUserProfile(user: User, avatar: ByteArray)
 }
