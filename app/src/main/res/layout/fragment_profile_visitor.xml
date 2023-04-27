@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".app.profile_visitor.ProfileVisitorFragment">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/avatar"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="10dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:shapeAppearanceOverlay="@style/roundedImageViewRounded"
+            tools:srcCompat="@tools:sample/avatars" />
+
+        <TextView
+            android:id="@+id/name"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="20dp"
+            android:layout_marginTop="10dp"
+            android:ellipsize="end"
+            android:maxLines="2"
+            android:textAppearance="?textAppearanceHeadline4"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/avatar"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="Иван Иванович " />
+
+        <TextView
+            android:id="@+id/status"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="20dp"
+            android:ellipsize="end"
+            android:maxLines="2"
+            android:textAppearance="?textAppearanceBody1"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/avatar"
+            app:layout_constraintTop_toBottomOf="@id/name"
+            tools:text="Всегда открыт к встречам Всегда открыт к встречам" />
+
+        <androidx.constraintlayout.widget.Barrier
+            android:id="@+id/barrier"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:barrierDirection="bottom"
+            app:constraint_referenced_ids="name,status,avatar" />
+
+        <TextView
+            android:id="@+id/my_games_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="20dp"
+            android:layout_marginTop="20dp"
+            android:text="@string/my_games_collection"
+            android:textAppearance="?textAppearanceHeadline6"
+            app:layout_constraintEnd_toStartOf="@id/btn_collection"
+            app:layout_constraintHorizontal_chainStyle="spread_inside"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/barrier" />
+
+        <TextView
+            android:id="@+id/btn_collection"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:layout_marginEnd="10dp"
+            android:padding="5dp"
+            android:text="@string/show_all"
+            android:textAlignment="center"
+            android:textAppearance="?textAppearanceBody2"
+            android:textColor="?colorSecondaryVariant"
+            app:layout_constraintBaseline_toBaselineOf="@id/my_games_title"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1"
+            app:layout_constraintHorizontal_weight="1"
+            app:layout_constraintStart_toEndOf="@id/my_games_title" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rec_my_games"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:clipToPadding="false"
+            android:orientation="horizontal"
+            android:paddingStart="20dp"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:layout_constrainedHeight="true"
+            app:layout_constraintTop_toBottomOf="@id/my_games_title"
+            tools:listitem="@layout/card_game_horizontal" />
+
+        <TextView
+            android:id="@+id/wishlist_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="20dp"
+            android:layout_marginTop="10dp"
+            android:text="@string/wishlist"
+            android:textAppearance="?textAppearanceHeadline6"
+            app:layout_constraintEnd_toStartOf="@id/btn_wishlist"
+            app:layout_constraintHorizontal_chainStyle="spread_inside"
+            app:layout_constraintHorizontal_weight="2"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/rec_my_games" />
+
+        <TextView
+            android:id="@+id/btn_wishlist"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:layout_marginEnd="10dp"
+            android:padding="5dp"
+            android:text="@string/show_all"
+            android:textAlignment="center"
+            android:textAppearance="?textAppearanceBody2"
+            android:textColor="?colorSecondaryVariant"
+            app:layout_constraintBaseline_toBaselineOf="@id/wishlist_title"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/wishlist_title" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rec_wishlist"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:clipToPadding="false"
+            android:orientation="horizontal"
+            android:paddingStart="20dp"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:layout_constrainedHeight="true"
+            app:layout_constraintTop_toBottomOf="@id/wishlist_title"
+            tools:listitem="@layout/card_game_horizontal" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>
