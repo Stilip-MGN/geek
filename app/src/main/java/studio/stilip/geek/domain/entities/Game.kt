@@ -10,4 +10,5 @@ data class Game(
     val description: String = "",
     val dimensions: String = "",
     val weight: String = "",
+    val ruleLink: String = "",
 )

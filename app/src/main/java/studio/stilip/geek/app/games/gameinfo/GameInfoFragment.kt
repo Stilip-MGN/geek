@@ -1,7 +1,10 @@
 package studio.stilip.geek.app.games.gameinfo
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.view.View
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
@@ -48,6 +51,17 @@ class GameInfoFragment : Fragment(R.layout.fragment_game_info) {
                             .into(imgSw)
                     }
                 }
+        }
+
+        binding.rule.setOnClickListener {
+            try {
+                val link = viewModel.game.value.ruleLink
+                val uri = Uri.parse(link)
+                val intent = Intent(Intent.ACTION_VIEW, uri)
+                startActivity(intent)
+            } catch (e: Exception) {
+                Toast.makeText(this.context, R.string.failed_load_rule, Toast.LENGTH_SHORT).show()
+            }
         }
     }
 

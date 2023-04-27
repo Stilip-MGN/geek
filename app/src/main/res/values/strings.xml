@@ -66,4 +66,6 @@
     <string name="enter_player_score">Укажите игрока и счёт</string>
     <string name="edit_profile">Редактирование профиля</string>
     <string name="title_status">Статус</string>
+    <string name="download_game_rulebook">Скачать правила игры</string>
+    <string name="failed_load_rule">Не удалось загрузить правила</string>
 </resources>
