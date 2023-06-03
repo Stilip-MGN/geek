@@ -80,7 +80,8 @@ class EventVisitorViewModel @Inject constructor(
 
     fun onSubscribeClick() {
         viewModelScope.launch {
-            subscribeToEvent(userId, eventId)
+            if (members.value.count() < event.value.maxMembers)
+                subscribeToEvent(userId, eventId)
         }
     }
 

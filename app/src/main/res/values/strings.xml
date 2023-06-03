@@ -68,4 +68,5 @@
     <string name="title_status">Статус</string>
     <string name="download_game_rulebook">Скачать правила игры</string>
     <string name="failed_load_rule">Не удалось загрузить правила</string>
+    <string name="collection_games">Коллекция игр</string>
 </resources>

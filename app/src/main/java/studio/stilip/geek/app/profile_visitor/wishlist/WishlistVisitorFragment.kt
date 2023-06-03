@@ -36,7 +36,7 @@ class WishlistVisitorFragment : Fragment(R.layout.fragment_wishlist_visitor) {
                 putString(GAME_ID, id)
             }
             findNavController().navigate(
-                R.id.action_navigation_wishlist_to_game_info,
+                R.id.action_navigation_wishlist_visitor_to_game_info,
                 arg
             )
         }

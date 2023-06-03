@@ -179,6 +179,9 @@
         <action
             android:id="@+id/action_navigation_event_visitor_to_event_chat"
             app:destination="@id/navigation_event_chat" />
+        <action
+            android:id="@+id/action_navigation_event_visitor_to_profile_visitor"
+            app:destination="@id/navigation_profile_visitor" />
     </fragment>
 
     <fragment

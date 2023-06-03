@@ -28,7 +28,7 @@ class CollectionVisitorFragment : Fragment(R.layout.fragment_collection_visitor)
         val binding = FragmentCollectionVisitorBinding.bind(view)
 
         hostViewModel.setBottomBarVisible(false)
-        hostViewModel.setToolbarTitle(getText(R.string.my_games_collection).toString())
+        hostViewModel.setToolbarTitle(getString(R.string.collection_games))
         hostViewModel.setToolbarBackBtnVisible(true)
 
         val adapter = GameAdapter { id ->

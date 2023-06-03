@@ -26,6 +26,7 @@ import studio.stilip.geek.app.events.event.MemberAdapter
 import studio.stilip.geek.app.events.event.RoundSpinnerAdapter
 import studio.stilip.geek.app.events.set.SetAdapter
 import studio.stilip.geek.app.games.gameinfo.GameInfoFragment
+import studio.stilip.geek.app.profile_visitor.ProfileVisitorFragment
 import studio.stilip.geek.databinding.FragmentEventVisitorBinding
 import studio.stilip.geek.domain.entities.Round
 
@@ -68,11 +69,17 @@ class EventVisitorFragment : Fragment(R.layout.fragment_event_visitor) {
         val binding = FragmentEventVisitorBinding.bind(view)
 
         hostViewModel.setBottomBarVisible(false)
-        hostViewModel.setToolbarTitle(getText(R.string.title_event).toString())
+        hostViewModel.setToolbarTitle(getString(R.string.title_event))
         hostViewModel.setToolbarBackBtnVisible(true)
 
-        val adapter = MemberAdapter {
-            //TODO Страница пользователей
+        val adapter = MemberAdapter { id ->
+            val arg = Bundle().apply {
+                putString(ProfileVisitorFragment.VISITOR_ID, id)
+            }
+            findNavController().navigate(
+                R.id.action_navigation_event_visitor_to_profile_visitor,
+                arg
+            )
         }
         val roundAdapter = RoundSpinnerAdapter(this.requireContext())
         val setAdapter = SetAdapter { }

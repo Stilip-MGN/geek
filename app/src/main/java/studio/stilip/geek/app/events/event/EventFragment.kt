@@ -23,6 +23,7 @@ import studio.stilip.geek.R
 import studio.stilip.geek.app.HostViewModel
 import studio.stilip.geek.app.events.set.SetAdapter
 import studio.stilip.geek.app.games.gameinfo.GameInfoFragment.Companion.GAME_ID
+import studio.stilip.geek.app.profile_visitor.ProfileVisitorFragment.Companion.VISITOR_ID
 import studio.stilip.geek.databinding.FragmentEventBinding
 import studio.stilip.geek.domain.entities.Round
 
@@ -78,8 +79,14 @@ class EventFragment : Fragment(R.layout.fragment_event) {
         hostViewModel.setToolbarTitle(getText(R.string.title_event).toString())
         hostViewModel.setToolbarBackBtnVisible(true)
 
-        val adapter = MemberAdapter {
-            //TODO Страница пользователей
+        val adapter = MemberAdapter { id ->
+            val arg = Bundle().apply {
+                putString(VISITOR_ID, id)
+            }
+            findNavController().navigate(
+                R.id.action_navigation_event_to_profile_visitor,
+                arg
+            )
         }
 
         val roundAdapter = RoundSpinnerAdapter(this.requireContext())

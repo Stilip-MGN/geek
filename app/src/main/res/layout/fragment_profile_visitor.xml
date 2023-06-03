@@ -61,7 +61,7 @@
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="20dp"
             android:layout_marginTop="20dp"
-            android:text="@string/my_games_collection"
+            android:text="@string/collection_games"
             android:textAppearance="?textAppearanceHeadline6"
             app:layout_constraintEnd_toStartOf="@id/btn_collection"
             app:layout_constraintHorizontal_chainStyle="spread_inside"
