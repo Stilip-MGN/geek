@@ -137,6 +137,9 @@
         <action
             android:id="@+id/action_navigation_event_to_set_create"
             app:destination="@id/navigation_set_create" />
+        <action
+            android:id="@+id/action_navigation_event_to_profile_visitor"
+            app:destination="@id/navigation_profile_visitor" />
     </fragment>
 
     <fragment
@@ -176,6 +179,9 @@
         <action
             android:id="@+id/action_navigation_event_visitor_to_event_chat"
             app:destination="@id/navigation_event_chat" />
+        <action
+            android:id="@+id/action_navigation_event_visitor_to_profile_visitor"
+            app:destination="@id/navigation_profile_visitor" />
     </fragment>
 
     <fragment
@@ -235,7 +241,40 @@
             android:id="@+id/action_navigation_profile_edit_to_profile"
             app:destination="@id/navigation_profile"
             app:popUpTo="@id/navigation_profile"
-            app:popUpToInclusive="true"/>
+            app:popUpToInclusive="true" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_profile_visitor"
+        android:name="studio.stilip.geek.app.profile_visitor.ProfileVisitorFragment"
+        tools:layout="@layout/fragment_profile_visitor">
+        <action
+            android:id="@+id/action_navigation_profile_visitor_to_collection_visitor"
+            app:destination="@id/navigation_collection_visitor" />
+        <action
+            android:id="@+id/action_navigation_profile_visitor_to_wishlist_visitor"
+            app:destination="@id/navigation_wishlist_visitor" />
+        <action
+            android:id="@+id/action_navigation_profile_visitor_to_game_info"
+            app:destination="@id/navigation_game_info" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_collection_visitor"
+        android:name="studio.stilip.geek.app.profile_visitor.collection.CollectionVisitorFragment"
+        tools:layout="@layout/fragment_collection_visitor">
+        <action
+            android:id="@+id/action_navigation_collection_visitor_to_game_info"
+            app:destination="@id/navigation_game_info" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_wishlist_visitor"
+        android:name="studio.stilip.geek.app.profile_visitor.wishlist.WishlistVisitorFragment"
+        tools:layout="@layout/fragment_wishlist_visitor">
+        <action
+            android:id="@+id/action_navigation_wishlist_visitor_to_game_info"
+            app:destination="@id/navigation_game_info" />
     </fragment>
 
 </navigation>

@@ -2,6 +2,7 @@ package studio.stilip.geek.app.events.edit
 
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import studio.stilip.geek.R
 import studio.stilip.geek.databinding.CardMemberWithDeleteBinding
 import studio.stilip.geek.domain.entities.User
 
@@ -17,6 +18,7 @@ class MemberWithDeleteViewHolder(
 
         Glide.with(avatar)
             .load(member.avatar)
+            .error(R.drawable.ic_person_24)
             .centerCrop()
             .into(avatar)
 

@@ -2,6 +2,7 @@ package studio.stilip.geek.app.events.event
 
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import studio.stilip.geek.R
 import studio.stilip.geek.databinding.CardMemberBinding
 import studio.stilip.geek.domain.entities.User
 
@@ -23,6 +24,7 @@ class MemberViewHolder(
 
         Glide.with(avatar)
             .load(member.avatar)
+            .error(R.drawable.ic_person_24)
             .centerCrop()
             .into(avatar)
 
