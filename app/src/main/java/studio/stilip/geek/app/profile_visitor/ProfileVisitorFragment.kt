@@ -85,6 +85,7 @@ class ProfileVisitorFragment : Fragment(R.layout.fragment_profile_visitor) {
 
                         Glide.with(avatar)
                             .load(user.avatar)
+                            .error(R.drawable.ic_person_24)
                             .centerCrop()
                             .into(avatar)
                     }

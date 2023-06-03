@@ -33,6 +33,7 @@ class PlayerSpinnerAdapter(
 
             Glide.with(avatar)
                 .load(player.avatar)
+                .error(R.drawable.ic_person_24)
                 .centerCrop()
                 .into(avatar)
         }
